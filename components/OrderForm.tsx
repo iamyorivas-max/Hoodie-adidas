@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { User, Phone, MapPin, CheckCircle2, ShoppingBag, AlertCircle, MessageSquare, Loader2 } from 'lucide-react';
 
-// --- ÉTAPE CRUCIALE : COLLEZ VOTRE URL DE DÉPLOIEMENT ICI ---
+// --- REMPLACEZ CETTE URL PAR VOTRE NOUVELLE URL DE DÉPLOIEMENT GMAIL ---
 const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbyc8Cw6zwWi8AyWh6gOT9sForbEIljFssxPwoRMI8Id-nWW3E363UL7QyeySan0BZUtqA/exec';
 
 const OrderForm: React.FC = () => {
@@ -24,10 +24,10 @@ const OrderForm: React.FC = () => {
     setIsSubmitting(true);
     setError(null);
 
-    // Vérification du numéro de téléphone (Maroc)
-    const phoneRegex = /^(05|06|07|08)\d{8}$/;
-    if (!phoneRegex.test(formData.phone.replace(/\s/g, ''))) {
-      setError("Veuillez entrer un numéro de téléphone marocain valide (06... ou 07...)");
+    // Vérification basique du téléphone marocain
+    const cleanPhone = formData.phone.replace(/\s/g, '');
+    if (cleanPhone.length < 10) {
+      setError("Le numéro de téléphone est trop court.");
       setIsSubmitting(false);
       return;
     }
@@ -38,7 +38,7 @@ const OrderForm: React.FC = () => {
         params.append(key, String(value).trim());
       });
 
-      // Envoi vers Google Sheets avec mode no-cors
+      // On utilise no-cors pour éviter les erreurs de redirection de Google
       await fetch(GOOGLE_SHEET_URL, {
         method: 'POST',
         mode: 'no-cors',
@@ -46,41 +46,40 @@ const OrderForm: React.FC = () => {
         body: params.toString()
       });
 
-      // On attend un petit peu pour faire "pro"
+      // Comme on est en no-cors, on simule le succès après un court délai
       setTimeout(() => {
         setIsSubmitting(false);
         setIsSuccess(true);
-      }, 1000);
+      }, 1200);
 
     } catch (err) {
-      console.error("Erreur technique:", err);
-      // En mode no-cors, fetch peut échouer si l'URL est bloquée ou mal copiée
-      setError("Problème de connexion. Veuillez réessayer ou commander via WhatsApp.");
+      console.error("Erreur d'envoi:", err);
+      setError("Un problème est survenu. Veuillez réessayer ou nous contacter sur WhatsApp.");
       setIsSubmitting(false);
     }
   };
 
-  const sendWhatsAppFallback = () => {
-    const text = `Nouvelle commande Hoodie Elite:\nNom: ${formData.fullname}\nTél: ${formData.phone}\nVille: ${formData.city}\nTaille: ${formData.size}\nCouleur: ${formData.color}`;
+  const sendWhatsApp = () => {
+    const text = `Bonjour, je commande le Hoodie Elite:\nNom: ${formData.fullname}\nTél: ${formData.phone}\nVille: ${formData.city}\nTaille: ${formData.size}\nCouleur: ${formData.color}`;
     window.open(`https://wa.me/212600000000?text=${encodeURIComponent(text)}`, '_blank');
   };
 
   if (isSuccess) {
     return (
       <section id="order-form" className="py-20 px-4 bg-white scroll-mt-20">
-        <div className="max-w-xl mx-auto text-center p-8 md:p-12 rounded-[40px] border-4 border-green-100 bg-green-50 shadow-2xl animate-in fade-in zoom-in duration-500">
-          <div className="w-24 h-24 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-8 shadow-lg shadow-green-200">
+        <div className="max-w-xl mx-auto text-center p-10 rounded-[40px] border-4 border-green-100 bg-green-50 shadow-2xl">
+          <div className="w-24 h-24 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-8">
             <CheckCircle2 size={48} className="text-white" />
           </div>
-          <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">C'est validé !</h2>
-          <p className="text-gray-600 mb-8 text-lg leading-relaxed">
-            Merci <strong>{formData.fullname}</strong>. Votre commande a été transmise avec succès. Notre équipe vous contactera sous peu au <strong>{formData.phone}</strong>.
+          <h2 className="text-3xl font-black text-gray-900 mb-4">Commande Reçue !</h2>
+          <p className="text-gray-600 mb-8 text-lg">
+            Merci <strong>{formData.fullname}</strong>. Nous préparons votre colis. Vous recevrez un appel de confirmation au <strong>{formData.phone}</strong> d'ici 24h.
           </p>
           <button 
             onClick={() => setIsSuccess(false)}
             className="text-green-700 font-bold hover:underline"
           >
-            Passer une autre commande
+            Faire un autre achat
           </button>
         </div>
       </section>
@@ -92,13 +91,13 @@ const OrderForm: React.FC = () => {
       <div className="max-w-2xl mx-auto">
         <div className="bg-white rounded-[32px] shadow-2xl overflow-hidden border border-gray-100">
           <div className="bg-orange-600 p-8 text-center text-white">
-            <h2 className="text-3xl font-black mb-2">🛍️ Commandez Maintenant</h2>
-            <p className="opacity-90 font-medium">Paiement cash à la livraison (Livraison Gratuite)</p>
+            <h2 className="text-3xl font-black mb-2">🚚 Livraison Gratuite</h2>
+            <p className="opacity-90 font-medium">Remplissez vos infos pour valider votre commande</p>
           </div>
 
           <form onSubmit={handleSubmit} className="p-6 md:p-10 space-y-5">
             {error && (
-              <div className="bg-red-50 border-2 border-red-100 text-red-600 p-4 rounded-2xl flex items-center gap-3 animate-bounce">
+              <div className="bg-red-50 border-2 border-red-100 text-red-600 p-4 rounded-2xl flex items-center gap-3">
                 <AlertCircle size={20} className="shrink-0" />
                 <span className="font-bold text-sm">{error}</span>
               </div>
@@ -106,10 +105,10 @@ const OrderForm: React.FC = () => {
 
             <div className="grid grid-cols-1 gap-4">
               <div>
-                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1 block ml-2">Nom Complet</label>
+                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1 block ml-2">Nom & Prénom</label>
                 <div className="relative">
                   <User className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-                  <input required type="text" placeholder="Ex: Ahmed Benani" className="w-full pl-12 pr-4 py-4 rounded-2xl border-2 border-gray-100 focus:border-orange-500 focus:ring-0 outline-none transition-all font-bold" value={formData.fullname} onChange={e => setFormData({...formData, fullname: e.target.value})} />
+                  <input required type="text" placeholder="Votre nom complet" className="w-full pl-12 pr-4 py-4 rounded-2xl border-2 border-gray-100 focus:border-orange-500 outline-none transition-all font-bold" value={formData.fullname} onChange={e => setFormData({...formData, fullname: e.target.value})} />
                 </div>
               </div>
 
@@ -117,7 +116,7 @@ const OrderForm: React.FC = () => {
                 <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1 block ml-2">Téléphone</label>
                 <div className="relative">
                   <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-                  <input required type="tel" placeholder="06 00 00 00 00" className="w-full pl-12 pr-4 py-4 rounded-2xl border-2 border-gray-100 focus:border-orange-500 focus:ring-0 outline-none transition-all font-bold" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} />
+                  <input required type="tel" placeholder="06 -- -- -- --" className="w-full pl-12 pr-4 py-4 rounded-2xl border-2 border-gray-100 focus:border-orange-500 outline-none transition-all font-bold" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} />
                 </div>
               </div>
 
@@ -130,7 +129,7 @@ const OrderForm: React.FC = () => {
                   <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1 block ml-2">Adresse</label>
                   <div className="relative">
                     <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-                    <input required type="text" placeholder="Quartier, Rue..." className="w-full pl-12 pr-4 py-4 rounded-2xl border-2 border-gray-100 focus:border-orange-500 outline-none font-bold" value={formData.address} onChange={e => setFormData({...formData, address: e.target.value})} />
+                    <input required type="text" placeholder="Quartier, N°..." className="w-full pl-12 pr-4 py-4 rounded-2xl border-2 border-gray-100 focus:border-orange-500 outline-none font-bold" value={formData.address} onChange={e => setFormData({...formData, address: e.target.value})} />
                   </div>
                 </div>
               </div>
@@ -138,13 +137,13 @@ const OrderForm: React.FC = () => {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1 block ml-2">Taille</label>
-                  <select className="w-full px-5 py-4 rounded-2xl border-2 border-gray-100 bg-gray-50 font-black outline-none appearance-none cursor-pointer" value={formData.size} onChange={e => setFormData({...formData, size: e.target.value})}>
+                  <select className="w-full px-5 py-4 rounded-2xl border-2 border-gray-100 bg-gray-50 font-black outline-none cursor-pointer" value={formData.size} onChange={e => setFormData({...formData, size: e.target.value})}>
                     <option value="S">S</option><option value="M">M</option><option value="L">L</option><option value="XL">XL</option><option value="XXL">XXL</option>
                   </select>
                 </div>
                 <div>
                   <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1 block ml-2">Couleur</label>
-                  <select className="w-full px-5 py-4 rounded-2xl border-2 border-gray-100 bg-gray-50 font-black outline-none appearance-none cursor-pointer" value={formData.color} onChange={e => setFormData({...formData, color: e.target.value})}>
+                  <select className="w-full px-5 py-4 rounded-2xl border-2 border-gray-100 bg-gray-50 font-black outline-none cursor-pointer" value={formData.color} onChange={e => setFormData({...formData, color: e.target.value})}>
                     <option value="Noir">Noir</option><option value="Gris">Gris</option><option value="Bleu">Bleu</option><option value="Vert">Vert</option>
                   </select>
                 </div>
@@ -160,24 +159,20 @@ const OrderForm: React.FC = () => {
                 <Loader2 className="animate-spin" size={24} />
               ) : (
                 <>
-                  <ShoppingBag className="group-hover:rotate-12 transition-transform" />
-                  COMMANDER - 299 DH
+                  <ShoppingBag />
+                  VALIDER MA COMMANDE
                 </>
               )}
             </button>
 
             <button 
               type="button"
-              onClick={sendWhatsAppFallback}
+              onClick={sendWhatsApp}
               className="w-full bg-green-50 text-green-700 py-4 rounded-2xl font-bold text-sm flex items-center justify-center gap-2 border-2 border-green-100 hover:bg-green-100 transition-all"
             >
               <MessageSquare size={18} />
-              Ou commander via WhatsApp
+              Acheter via WhatsApp
             </button>
-
-            <p className="text-[9px] text-gray-400 font-bold uppercase tracking-widest text-center">
-              🔐 Vos données sont sécurisées. Paiement après réception.
-            </p>
           </form>
         </div>
       </div>
