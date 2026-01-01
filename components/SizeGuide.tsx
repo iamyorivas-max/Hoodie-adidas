@@ -1,110 +1,136 @@
 
-import React from 'react';
-import { Ruler, Info } from 'lucide-react';
+import React, { useState } from 'react';
+import { Ruler, CheckCircle, Info, ChevronRight } from 'lucide-react';
+
+interface SizeData {
+  label: string;
+  width: string;
+  length: string;
+  recom: string;
+}
 
 const SizeGuide: React.FC = () => {
-  const sizes = [
-    { label: 'S', width: '52 cm', length: '68 cm', sleeve: '61 cm' },
-    { label: 'M', width: '54 cm', length: '70 cm', sleeve: '62 cm' },
-    { label: 'L', width: '56 cm', length: '72 cm', sleeve: '63 cm' },
-    { label: 'XL', width: '58 cm', length: '74 cm', sleeve: '64 cm' },
-    { label: 'XXL', width: '60 cm', length: '76 cm', sleeve: '65 cm' },
-  ];
+  const [selectedSize, setSelectedSize] = useState<string>('M');
+
+  const sizeData: Record<string, SizeData> = {
+    'S': { label: 'S', width: '52 cm', length: '68 cm', recom: 'Moins de 65kg / 1m70' },
+    'M': { label: 'M', width: '54 cm', length: '70 cm', recom: '65 - 75kg / 1m75' },
+    'L': { label: 'L', width: '56 cm', length: '72 cm', recom: '75 - 85kg / 1m80' },
+    'XL': { label: 'XL', width: '58 cm', length: '74 cm', recom: '85 - 95kg / 1m85' },
+    'XXL': { label: 'XXL', width: '60 cm', length: '76 cm', recom: 'Plus de 95kg / 1m90+' },
+  };
+
+  const current = sizeData[selectedSize];
 
   return (
-    <section className="py-20 px-4 md:px-8 bg-white">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-orange-100 text-orange-600 mb-4">
-            <Ruler size={32} />
+    <section className="py-24 px-4 md:px-8 bg-white overflow-hidden">
+      <div className="max-w-5xl mx-auto">
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-2 bg-orange-100 text-orange-600 px-4 py-2 rounded-full font-black text-xs uppercase tracking-widest mb-4">
+             <Ruler size={14} />
+             Trouvez votre taille parfaite
           </div>
-          <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">Guide des Tailles</h2>
-          <p className="text-gray-600">Prenez vos mesures pour commander en toute confiance.</p>
+          <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-4 tracking-tight">Guide des Tailles Interactif</h2>
+          <p className="text-gray-500 text-lg max-w-xl mx-auto">Choisissez votre taille pour visualiser les dimensions précises sur le vêtement.</p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 items-center">
-          {/* Hoodie Vector Illustration */}
-          <div className="lg:col-span-1 bg-gray-50 rounded-[32px] p-8 border border-gray-100 flex flex-col items-center">
-            <div className="relative w-full aspect-square max-w-[240px]">
-              {/* Hoodie SVG Vector */}
-              <svg viewBox="0 0 100 100" className="w-full h-full text-gray-200 fill-current stroke-gray-300 stroke-[0.5]">
-                <path d="M50 10 C45 10 40 12 35 15 L32 18 C28 20 25 22 22 22 L10 22 C8 22 7 23 7 25 L5 45 C4 50 6 52 10 52 L18 52 L18 85 C18 88 20 90 23 90 L77 90 C80 90 82 88 82 85 L82 52 L90 52 C94 52 96 50 95 45 L93 25 C93 23 92 22 90 22 L78 22 C75 22 72 20 68 18 L65 15 C60 12 55 10 50 10 Z M40 25 L60 25 L65 40 L35 40 Z" />
-                {/* Pocket and hood details */}
-                <path d="M35 65 L65 65 C68 65 70 67 70 70 L70 82 C70 84 68 85 65 85 L35 85 C32 85 30 84 30 82 L30 70 C30 67 32 65 35 65 Z" fill="none" stroke="currentColor" strokeWidth="0.5" opacity="0.5" />
-                <path d="M50 15 C45 15 42 18 40 25 M50 15 C55 15 58 18 60 25" fill="none" stroke="currentColor" strokeWidth="0.5" opacity="0.5" />
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          
+          {/* LEFT: Size Selector & Recom */}
+          <div className="lg:col-span-5 space-y-8 order-2 lg:order-1">
+            <div className="flex flex-wrap gap-3 justify-center lg:justify-start">
+              {Object.keys(sizeData).map((size) => (
+                <button
+                  key={size}
+                  onClick={() => setSelectedSize(size)}
+                  className={`w-16 h-16 md:w-20 md:h-20 rounded-2xl font-black text-xl transition-all flex items-center justify-center border-4 ${
+                    selectedSize === size 
+                    ? 'bg-gray-900 text-white border-orange-500 scale-110 shadow-xl' 
+                    : 'bg-white text-gray-400 border-gray-100 hover:border-gray-300'
+                  }`}
+                >
+                  {size}
+                </button>
+              ))}
+            </div>
+
+            <div className="bg-gray-50 p-8 rounded-[32px] border border-gray-100 relative overflow-hidden group">
+               <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:rotate-12 transition-transform">
+                  <Info size={60} className="text-gray-900" />
+               </div>
+               <h3 className="text-xs font-black text-orange-600 uppercase tracking-[0.2em] mb-4">Recommandation</h3>
+               <p className="text-2xl font-black text-gray-900 mb-2">{current.recom}</p>
+               <p className="text-gray-500 text-sm leading-relaxed">
+                  Basé sur une coupe <span className="text-gray-900 font-bold underline decoration-orange-500">Standard Fit</span>. Pour un effet plus large, prenez la taille supérieure.
+               </p>
+               <div className="mt-6 flex items-center gap-2 text-green-600 font-bold text-sm">
+                  <CheckCircle size={18} />
+                  <span>En stock et prêt à expédier</span>
+               </div>
+            </div>
+          </div>
+
+          {/* RIGHT: Visual Hoodie Vector */}
+          <div className="lg:col-span-7 flex flex-col items-center order-1 lg:order-2">
+            <div className="relative w-full max-w-[400px] aspect-square">
+              {/* Main SVG Vector */}
+              <svg viewBox="0 0 100 100" className="w-full h-full text-gray-100 fill-current drop-shadow-2xl">
+                <path d="M50 10 C42 10 38 12 33 15 L28 18 C24 20 20 22 15 22 L5 22 C3 22 2 23 2 25 L1 50 C1 55 3 58 8 58 L12 58 L12 90 C12 94 15 97 19 97 L81 97 C85 97 88 94 88 90 L88 58 L92 58 C97 58 99 55 99 50 L98 25 C98 23 97 22 95 22 L85 22 C80 22 76 20 72 18 L67 15 C62 12 58 10 50 10 Z" />
+                {/* Details like pocket and hood */}
+                <path d="M30 65 Q50 60 70 65 L72 85 Q50 90 28 85 Z" fill="white" opacity="0.3" />
+                <path d="M40 10 Q50 25 60 10" fill="none" stroke="white" strokeWidth="0.5" opacity="0.5" />
               </svg>
 
-              {/* WIDTH Measurement Line */}
-              <div className="absolute top-[48%] left-[18%] right-[18%] flex items-center justify-between">
-                <div className="w-1.5 h-1.5 bg-orange-500 rounded-full"></div>
-                <div className="flex-grow h-[2px] bg-orange-500 relative flex justify-center">
-                   <span className="absolute -top-6 bg-orange-600 text-white text-[9px] font-black px-1.5 py-0.5 rounded uppercase">Largeur</span>
-                </div>
-                <div className="w-1.5 h-1.5 bg-orange-500 rounded-full"></div>
+              {/* WIDTH TOOLTIP */}
+              <div className="absolute top-[50%] left-0 right-0 flex justify-center">
+                 <div className="relative w-[70%] h-[2px] bg-orange-500/30 flex items-center justify-center">
+                    <div className="absolute left-0 w-2 h-2 rounded-full bg-orange-500"></div>
+                    <div className="absolute right-0 w-2 h-2 rounded-full bg-orange-500"></div>
+                    <div className="bg-orange-600 text-white px-3 py-1.5 rounded-xl font-black text-sm shadow-lg transform -translate-y-0 transition-all duration-500 flex items-center gap-2">
+                       <span className="text-[10px] opacity-70">LARGEUR:</span>
+                       {current.width}
+                    </div>
+                 </div>
               </div>
 
-              {/* LENGTH Measurement Line */}
-              <div className="absolute top-[18%] bottom-[10%] left-[50%] flex flex-col items-center justify-between">
-                <div className="w-1.5 h-1.5 bg-orange-500 rounded-full"></div>
-                <div className="flex-grow w-[2px] bg-orange-500 relative flex items-center">
-                   <span className="absolute -left-12 rotate-[-90deg] bg-orange-600 text-white text-[9px] font-black px-1.5 py-0.5 rounded uppercase whitespace-nowrap">Longueur</span>
-                </div>
-                <div className="w-1.5 h-1.5 bg-orange-500 rounded-full"></div>
-              </div>
-
-              {/* SLEEVE Measurement Line */}
-              <div className="absolute top-[22%] left-[8%] w-[25%] h-[2px] bg-blue-500 rotate-[45deg] origin-top-left flex items-center justify-between">
-                <div className="w-1 h-1 bg-blue-500 rounded-full"></div>
-                <div className="flex-grow relative flex justify-center">
-                  <span className="absolute -top-6 -rotate-[45deg] bg-blue-600 text-white text-[9px] font-black px-1.5 py-0.5 rounded uppercase">Manches</span>
-                </div>
-                <div className="w-1 h-1 bg-blue-500 rounded-full"></div>
+              {/* LENGTH TOOLTIP */}
+              <div className="absolute inset-y-[15%] right-[15%] flex flex-col items-center justify-center">
+                 <div className="relative w-[2px] h-[75%] bg-blue-500/30 flex items-center justify-center">
+                    <div className="absolute top-0 w-2 h-2 rounded-full bg-blue-500"></div>
+                    <div className="absolute bottom-0 w-2 h-2 rounded-full bg-blue-500"></div>
+                    <div className="bg-blue-600 text-white px-3 py-1.5 rounded-xl font-black text-sm shadow-lg transform translate-x-12 transition-all duration-500 flex items-center gap-2 whitespace-nowrap">
+                       <span className="text-[10px] opacity-70">LONGUEUR:</span>
+                       {current.length}
+                    </div>
+                 </div>
               </div>
             </div>
-            <p className="mt-8 text-xs text-center text-gray-400 font-medium italic leading-tight">
-              Posez votre hoodie à plat et prenez les mesures indiquées.
-            </p>
-          </div>
-
-          {/* Table */}
-          <div className="lg:col-span-2 overflow-x-auto">
-            <table className="w-full text-left border-collapse min-w-[320px]">
-              <thead>
-                <tr className="border-b-2 border-gray-100">
-                  <th className="py-4 px-2 text-sm font-black text-gray-400 uppercase tracking-widest">Taille</th>
-                  <th className="py-4 px-2 text-sm font-black text-gray-400 uppercase tracking-widest text-center">Largeur</th>
-                  <th className="py-4 px-2 text-sm font-black text-gray-400 uppercase tracking-widest text-center">Longueur</th>
-                  <th className="py-4 px-2 text-sm font-black text-gray-400 uppercase tracking-widest text-center">Manches</th>
-                </tr>
-              </thead>
-              <tbody>
-                {sizes.map((size) => (
-                  <tr key={size.label} className="border-b border-gray-50 hover:bg-orange-50 transition-colors group">
-                    <td className="py-4 px-2">
-                      <span className="w-10 h-10 flex items-center justify-center rounded-lg bg-gray-900 text-white font-black group-hover:bg-orange-600 transition-colors">
-                        {size.label}
-                      </span>
-                    </td>
-                    <td className="py-4 px-2 text-center font-bold text-gray-700">{size.width}</td>
-                    <td className="py-4 px-2 text-center font-bold text-gray-700">{size.length}</td>
-                    <td className="py-4 px-2 text-center font-bold text-gray-700">{size.sleeve}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-
-            <div className="mt-8 bg-blue-50 rounded-2xl p-5 border border-blue-100 flex gap-4">
-              <div className="shrink-0 text-blue-500 mt-1">
-                <Info size={20} />
-              </div>
-              <div>
-                <h4 className="font-bold text-blue-900 text-sm mb-1">Besoin d'aide ?</h4>
-                <p className="text-blue-800 text-xs leading-relaxed">
-                  Notre Hoodie Elite a une coupe <strong>Standard Fit</strong>. Pour un look <strong>Oversized</strong>, nous conseillons de choisir <strong>une taille au-dessus</strong> de votre taille habituelle.
-                </p>
-              </div>
+            
+            <div className="mt-4 flex items-center gap-6 text-gray-400 font-bold text-xs uppercase tracking-widest">
+               <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-orange-500"></div>
+                  Largeur (Aisselle à aisselle)
+               </div>
+               <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+                  Longueur (Épaule au bas)
+               </div>
             </div>
           </div>
+        </div>
+        
+        {/* Trust Badge footer */}
+        <div className="mt-20 pt-10 border-t border-gray-100 flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16">
+           <div className="flex items-center gap-4">
+              <div className="bg-orange-50 p-3 rounded-2xl text-orange-600 font-black">14j</div>
+              <p className="text-sm font-bold text-gray-600">Retours et échanges <br/> gratuits sous 14 jours</p>
+           </div>
+           <div className="flex items-center gap-4">
+              <div className="bg-blue-50 p-3 rounded-2xl text-blue-600">
+                 <CheckCircle size={24} />
+              </div>
+              <p className="text-sm font-bold text-gray-600">Taille standard <br/> marocaine (EU)</p>
+           </div>
         </div>
       </div>
     </section>
