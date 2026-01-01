@@ -78,8 +78,8 @@ const ProductHero: React.FC = () => {
 
         <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100">
           <div className="flex items-end gap-3 mb-4">
-            <span className="text-4xl font-black text-gray-900">49.90 €</span>
-            <span className="text-xl text-gray-400 line-through mb-1">99.80 €</span>
+            <span className="text-4xl font-black text-gray-900">299 DH</span>
+            <span className="text-xl text-gray-400 line-through mb-1">599 DH</span>
           </div>
           
           <a 
