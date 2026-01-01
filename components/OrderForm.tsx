@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { User, Phone, MapPin, CheckCircle2, ShoppingBag, AlertCircle, MessageSquare, Loader2 } from 'lucide-react';
 
 // --- REMPLACEZ CETTE URL PAR VOTRE NOUVELLE URL DE DÉPLOIEMENT GMAIL ---
-const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbyc8Cw6zwWi8AyWh6gOT9sForbEIljFssxPwoRMI8Id-nWW3E363UL7QyeySan0BZUtqA/exec';
+const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbyvTK-hHnk8YcGpeUoOsvY1d260av1W4eLPPCSX8epEs950VpTZjh_rfLed-DDAoEu8pg/exec';
 
 const OrderForm: React.FC = () => {
   const [formData, setFormData] = useState({
