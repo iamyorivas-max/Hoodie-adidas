@@ -23,7 +23,7 @@ const ProductHero: React.FC = () => {
             alt="Hoodie Elite Main" 
             className="w-full h-full object-cover transition-opacity duration-300"
           />
-          <div className="absolute top-4 right-4 bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">
+          <div className="absolute top-4 right-4 bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg animate-bounce">
             -50% OFF
           </div>
         </div>
@@ -34,7 +34,7 @@ const ProductHero: React.FC = () => {
               key={idx}
               onClick={() => setMainImage(img)}
               className={`w-20 h-24 flex-shrink-0 rounded-lg overflow-hidden border-2 transition-all ${
-                mainImage === img ? 'border-orange-500 scale-105' : 'border-transparent'
+                mainImage === img ? 'border-orange-500 scale-105 shadow-md' : 'border-transparent'
               }`}
             >
               <img src={img} alt={`Thumbnail ${idx}`} className="w-full h-full object-cover" />
@@ -58,7 +58,7 @@ const ProductHero: React.FC = () => {
         </div>
 
         <p className="text-lg text-gray-600 leading-relaxed">
-          Découvrez la fusion parfaite entre <span className="font-bold text-gray-900">chaleur</span>, <span className="font-bold text-gray-900">douceur</span> et <span className="font-bold text-gray-900">durabilité</span>. Notre Hoodie Elite est conçu avec un coton premium brossé pour vous offrir un confort inégalé, que ce soit pour vos sorties ou vos moments de détente.
+          Découvrez la fusion parfaite entre <span className="font-bold text-gray-900">chaleur</span>, <span className="font-bold text-gray-900">douceur</span> et <span className="font-bold text-gray-900">durabilité</span>. Notre Hoodie Elite est conçu avec un coton premium brossé pour vous offrir un confort inégalé.
         </p>
 
         <ul className="space-y-3">
@@ -76,24 +76,39 @@ const ProductHero: React.FC = () => {
           </li>
         </ul>
 
-        <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100">
-          <div className="flex items-end gap-3 mb-4">
-            <span className="text-4xl font-black text-gray-900">299 DH</span>
-            <span className="text-xl text-gray-400 line-through mb-1">599 DH</span>
+        {/* PRICE CARD UPDATED AND ANIMATED */}
+        <div className="bg-gray-50 p-6 md:p-8 rounded-[32px] border border-gray-100 shadow-sm">
+          <div className="flex items-center justify-center gap-4 mb-6 transform transition-transform hover:scale-105 duration-300 cursor-default">
+            <span className="text-5xl font-black text-gray-900 tracking-tighter">299 DH</span>
+            <span className="text-2xl text-red-500 line-through font-bold opacity-90 decoration-2">599 DH</span>
           </div>
           
           <a 
             href="#order-form" 
-            className="w-full bg-orange-600 hover:bg-orange-700 text-white text-center py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 shadow-lg shadow-orange-200 transition-all active:scale-95"
+            className="w-full bg-orange-600 hover:bg-orange-700 text-white text-center py-5 rounded-2xl font-black text-xl flex items-center justify-center gap-3 shadow-xl shadow-orange-200 transition-all active:scale-95 group relative overflow-hidden"
           >
-            <ShoppingBag size={22} />
+            {/* Glossy sweep animation */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] transition-none pointer-events-none"></div>
+            <ShoppingBag size={24} />
             Commander maintenant
           </a>
-          <p className="text-center text-xs text-gray-500 mt-3 font-medium">
-             ⚡ Plus que 7 articles en stock !
-          </p>
+          
+          <div className="flex items-center justify-center gap-2 mt-5 animate-pulse">
+            <span className="flex h-2.5 w-2.5 rounded-full bg-red-600 shadow-[0_0_8px_rgba(220,38,38,0.8)]"></span>
+            <p className="text-center text-xs md:text-sm text-red-600 font-black uppercase tracking-widest">
+               ⚡ Plus que 7 articles en stock !
+            </p>
+          </div>
         </div>
       </div>
+
+      <style>{`
+        @keyframes shimmer {
+          100% {
+            transform: translateX(100%);
+          }
+        }
+      `}</style>
     </section>
   );
 };

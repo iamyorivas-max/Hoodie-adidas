@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Ruler, Info, ArrowRightLeft } from 'lucide-react';
+import { Ruler, Info } from 'lucide-react';
 
 const SizeGuide: React.FC = () => {
   const sizes = [
@@ -19,36 +19,56 @@ const SizeGuide: React.FC = () => {
             <Ruler size={32} />
           </div>
           <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">Guide des Tailles</h2>
-          <p className="text-gray-600">Trouvez la coupe parfaite pour votre confort.</p>
+          <p className="text-gray-600">Prenez vos mesures pour commander en toute confiance.</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 items-center">
-          {/* Schema Illustration */}
+          {/* Hoodie Vector Illustration */}
           <div className="lg:col-span-1 bg-gray-50 rounded-[32px] p-8 border border-gray-100 flex flex-col items-center">
-            <div className="relative w-48 h-56 border-2 border-dashed border-gray-300 rounded-xl flex items-center justify-center">
-              {/* Simple Hoodie Silhouette Represented by Lines */}
-              <div className="absolute inset-4 border-2 border-gray-400 rounded-t-3xl"></div>
-              {/* Width Line */}
-              <div className="absolute left-4 right-4 top-1/2 border-t-2 border-orange-500 flex justify-between items-center">
-                <div className="w-1.5 h-1.5 bg-orange-500 rounded-full -ml-0.5"></div>
-                <span className="bg-orange-500 text-white text-[10px] px-1 font-bold rounded -mt-0.5">LARGEUR</span>
-                <div className="w-1.5 h-1.5 bg-orange-500 rounded-full -mr-0.5"></div>
+            <div className="relative w-full aspect-square max-w-[240px]">
+              {/* Hoodie SVG Vector */}
+              <svg viewBox="0 0 100 100" className="w-full h-full text-gray-200 fill-current stroke-gray-300 stroke-[0.5]">
+                <path d="M50 10 C45 10 40 12 35 15 L32 18 C28 20 25 22 22 22 L10 22 C8 22 7 23 7 25 L5 45 C4 50 6 52 10 52 L18 52 L18 85 C18 88 20 90 23 90 L77 90 C80 90 82 88 82 85 L82 52 L90 52 C94 52 96 50 95 45 L93 25 C93 23 92 22 90 22 L78 22 C75 22 72 20 68 18 L65 15 C60 12 55 10 50 10 Z M40 25 L60 25 L65 40 L35 40 Z" />
+                {/* Pocket and hood details */}
+                <path d="M35 65 L65 65 C68 65 70 67 70 70 L70 82 C70 84 68 85 65 85 L35 85 C32 85 30 84 30 82 L30 70 C30 67 32 65 35 65 Z" fill="none" stroke="currentColor" strokeWidth="0.5" opacity="0.5" />
+                <path d="M50 15 C45 15 42 18 40 25 M50 15 C55 15 58 18 60 25" fill="none" stroke="currentColor" strokeWidth="0.5" opacity="0.5" />
+              </svg>
+
+              {/* WIDTH Measurement Line */}
+              <div className="absolute top-[48%] left-[18%] right-[18%] flex items-center justify-between">
+                <div className="w-1.5 h-1.5 bg-orange-500 rounded-full"></div>
+                <div className="flex-grow h-[2px] bg-orange-500 relative flex justify-center">
+                   <span className="absolute -top-6 bg-orange-600 text-white text-[9px] font-black px-1.5 py-0.5 rounded uppercase">Largeur</span>
+                </div>
+                <div className="w-1.5 h-1.5 bg-orange-500 rounded-full"></div>
               </div>
-              {/* Length Line */}
-              <div className="absolute top-4 bottom-4 left-1/2 border-l-2 border-orange-500 flex flex-col justify-between items-center">
-                <div className="w-1.5 h-1.5 bg-orange-500 rounded-full -mt-0.5"></div>
-                <span className="bg-orange-500 text-white text-[10px] px-1 font-bold rounded -ml-0.5 rotate-90 origin-left translate-x-3 translate-y-6">LONGUEUR</span>
-                <div className="w-1.5 h-1.5 bg-orange-500 rounded-full -mb-0.5"></div>
+
+              {/* LENGTH Measurement Line */}
+              <div className="absolute top-[18%] bottom-[10%] left-[50%] flex flex-col items-center justify-between">
+                <div className="w-1.5 h-1.5 bg-orange-500 rounded-full"></div>
+                <div className="flex-grow w-[2px] bg-orange-500 relative flex items-center">
+                   <span className="absolute -left-12 rotate-[-90deg] bg-orange-600 text-white text-[9px] font-black px-1.5 py-0.5 rounded uppercase whitespace-nowrap">Longueur</span>
+                </div>
+                <div className="w-1.5 h-1.5 bg-orange-500 rounded-full"></div>
+              </div>
+
+              {/* SLEEVE Measurement Line */}
+              <div className="absolute top-[22%] left-[8%] w-[25%] h-[2px] bg-blue-500 rotate-[45deg] origin-top-left flex items-center justify-between">
+                <div className="w-1 h-1 bg-blue-500 rounded-full"></div>
+                <div className="flex-grow relative flex justify-center">
+                  <span className="absolute -top-6 -rotate-[45deg] bg-blue-600 text-white text-[9px] font-black px-1.5 py-0.5 rounded uppercase">Manches</span>
+                </div>
+                <div className="w-1 h-1 bg-blue-500 rounded-full"></div>
               </div>
             </div>
-            <p className="mt-6 text-xs text-center text-gray-400 font-medium italic">
-              Mesurez un de vos hoodies à plat pour comparer.
+            <p className="mt-8 text-xs text-center text-gray-400 font-medium italic leading-tight">
+              Posez votre hoodie à plat et prenez les mesures indiquées.
             </p>
           </div>
 
           {/* Table */}
           <div className="lg:col-span-2 overflow-x-auto">
-            <table className="w-full text-left border-collapse">
+            <table className="w-full text-left border-collapse min-w-[320px]">
               <thead>
                 <tr className="border-b-2 border-gray-100">
                   <th className="py-4 px-2 text-sm font-black text-gray-400 uppercase tracking-widest">Taille</th>
@@ -78,9 +98,9 @@ const SizeGuide: React.FC = () => {
                 <Info size={20} />
               </div>
               <div>
-                <h4 className="font-bold text-blue-900 text-sm mb-1">Un doute sur la taille ?</h4>
+                <h4 className="font-bold text-blue-900 text-sm mb-1">Besoin d'aide ?</h4>
                 <p className="text-blue-800 text-xs leading-relaxed">
-                  Le Hoodie Elite a une coupe <strong>Standard Fit</strong>. Si vous aimez le porter large (Oversized), nous vous recommandons de prendre <strong>une taille au-dessus</strong> de votre taille habituelle.
+                  Notre Hoodie Elite a une coupe <strong>Standard Fit</strong>. Pour un look <strong>Oversized</strong>, nous conseillons de choisir <strong>une taille au-dessus</strong> de votre taille habituelle.
                 </p>
               </div>
             </div>
