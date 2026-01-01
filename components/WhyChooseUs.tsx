@@ -11,18 +11,18 @@ const WhyChooseUs: React.FC = () => {
     },
     {
       icon: <Zap className="text-orange-600" size={32} />,
-      title: "Livraison Rapide",
-      desc: "Recevez votre colis chez vous en 48h à 72h partout en France."
+      title: "Livraison 48h",
+      desc: "Nous livrons partout au Maroc (Casablanca, Rabat, Marrakech, Tanger...) en un temps record."
     },
     {
       icon: <Headphones className="text-orange-600" size={32} />,
-      title: "Service Client 24/7",
-      desc: "Une question ? Notre équipe réactive est disponible pour vous aider à tout moment."
+      title: "Service Client Maroc",
+      desc: "Notre équipe marocaine est disponible par téléphone ou WhatsApp pour répondre à vos besoins."
     },
     {
       icon: <ShieldCheck className="text-orange-600" size={32} />,
-      title: "Satisfaction Garantie",
-      desc: "Pas satisfait ? Nous vous échangeons le produit sans frais sous 14 jours."
+      title: "Vérifiez avant de payer",
+      desc: "Ouvrez votre colis, vérifiez la qualité et la taille, puis payez le livreur en toute confiance."
     }
   ];
 
