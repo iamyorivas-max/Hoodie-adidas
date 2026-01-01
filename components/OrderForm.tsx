@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { User, Phone, MapPin, CheckCircle2, ShoppingBag, ShieldCheck, AlertCircle } from 'lucide-react';
 
-// URL de votre script Google Apps (Vérifiée et à jour)
+// URL de votre script Google Apps - Assurez-vous d'avoir bien publié la DERNIÈRE version
 const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbyc8Cw6zwWi8AyWh6gOT9sForbEIljFssxPwoRMI8Id-nWW3E363UL7QyeySan0BZUtqA/exec';
 
 const OrderForm: React.FC = () => {
@@ -24,40 +24,42 @@ const OrderForm: React.FC = () => {
     setIsSubmitting(true);
     setError(null);
 
+    // Validation basique du numéro
+    if (formData.phone.length < 10) {
+      setError("Le numéro de téléphone semble trop court.");
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
-      // On utilise URLSearchParams pour envoyer les données au format "Form Data"
-      // C'est le format le plus fiable pour Google Apps Script avec e.parameter
+      // Préparation des données au format URL standard (le plus robuste pour Google)
       const params = new URLSearchParams();
-      params.append('fullname', formData.fullname.trim());
-      params.append('phone', formData.phone.trim());
-      params.append('city', formData.city.trim());
-      params.append('address', formData.address.trim());
-      params.append('size', formData.size);
-      params.append('color', formData.color);
+      // Fix: cast value to string to ensure .trim() is available and fix the 'unknown' type error
+      Object.entries(formData).forEach(([key, value]) => {
+        params.append(key, (value as string).trim());
+      });
 
-      console.log("Tentative d'envoi de la commande...", formData);
+      console.log("Envoi en cours vers Google Sheets...");
 
-      // L'utilisation de 'no-cors' est obligatoire pour éviter que le navigateur
-      // bloque la requête à cause des redirections de Google.
+      // On utilise fetch avec no-cors pour éviter les blocages de sécurité de redirection Google
       await fetch(GOOGLE_SHEET_URL, {
         method: 'POST',
-        mode: 'no-cors', 
+        mode: 'no-cors',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: params.toString(),
       });
 
-      // Avec no-cors, on ne reçoit pas de réponse lisible, mais si le fetch 
-      // réussit (ne jette pas d'erreur), c'est que les données ont été transmises.
+      // Simulation d'un délai de traitement pour l'expérience utilisateur
       setTimeout(() => {
         setIsSubmitting(false);
         setIsSuccess(true);
-      }, 1000);
+      }, 1500);
 
     } catch (err) {
-      console.error("Erreur lors de l'envoi de la commande:", err);
-      setError("Une erreur technique est survenue. Veuillez vérifier votre connexion ou nous contacter.");
+      console.error("Erreur Fetch:", err);
+      setError("Erreur de connexion. Si le problème persiste, contactez-nous sur WhatsApp.");
       setIsSubmitting(false);
     }
   };
@@ -65,17 +67,19 @@ const OrderForm: React.FC = () => {
   if (isSuccess) {
     return (
       <section id="order-form" className="py-20 px-4 bg-white">
-        <div className="max-w-xl mx-auto text-center p-10 rounded-3xl border-2 border-green-100 bg-green-50 shadow-inner">
-          <CheckCircle2 size={80} className="text-green-500 mx-auto mb-6" />
-          <h2 className="text-3xl font-black text-gray-900 mb-4">Commande Validée !</h2>
+        <div className="max-w-xl mx-auto text-center p-10 rounded-3xl border-2 border-green-100 bg-green-50 shadow-xl">
+          <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6">
+            <CheckCircle2 size={40} className="text-white" />
+          </div>
+          <h2 className="text-3xl font-black text-gray-900 mb-4">Commande Confirmée !</h2>
           <p className="text-gray-600 mb-8 text-lg">
-            Merci <strong>{formData.fullname.split(' ')[0]}</strong>. Nous avons bien reçu vos informations. Un conseiller va vous appeler sur le <strong>{formData.phone}</strong> pour confirmer l'envoi de votre Hoodie Elite.
+            Merci <strong>{formData.fullname.split(' ')[0]}</strong>. Votre demande est enregistrée. Nous vous appellerons au <strong>{formData.phone}</strong> pour confirmer l'adresse de livraison à <strong>{formData.city}</strong>.
           </p>
           <button 
             onClick={() => setIsSuccess(false)}
-            className="bg-green-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-green-700 transition-colors"
+            className="text-green-700 font-bold hover:underline transition-all"
           >
-            Passer une autre commande
+            Faire un autre achat
           </button>
         </div>
       </section>
@@ -86,33 +90,29 @@ const OrderForm: React.FC = () => {
     <section id="order-form" className="py-16 px-4 md:px-8 bg-gray-50 scroll-mt-20">
       <div className="max-w-2xl mx-auto">
         <div className="text-center mb-10">
-          <h2 className="text-3xl font-black text-gray-900 mb-3">🛍️ Formulaire de Commande</h2>
-          <p className="text-gray-600 font-medium">L'expédition commencera dès confirmation téléphonique.</p>
+          <span className="bg-orange-100 text-orange-700 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider">Étape Finale</span>
+          <h2 className="text-3xl font-black text-gray-900 mt-4 mb-3">Informations de Livraison</h2>
+          <p className="text-gray-600 font-medium">Remplissez le formulaire ci-dessous pour valider votre commande.</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="bg-white p-6 md:p-10 rounded-3xl shadow-2xl space-y-6 border border-gray-100 relative overflow-hidden">
-          {/* Badge de sécurité */}
-          <div className="absolute top-0 right-0 bg-gray-900 text-white text-[10px] px-4 py-1 font-bold uppercase tracking-widest rounded-bl-xl">
-            Sécurisé SSL
-          </div>
-
+        <form onSubmit={handleSubmit} className="bg-white p-6 md:p-10 rounded-3xl shadow-2xl space-y-6 border border-gray-100 transition-all hover:shadow-orange-100/50">
           {error && (
-            <div className="bg-red-50 border border-red-100 text-red-600 p-4 rounded-xl flex items-center gap-3 text-sm">
+            <div className="bg-red-50 border border-red-100 text-red-600 p-4 rounded-xl flex items-center gap-3 animate-shake">
               <AlertCircle size={20} />
-              {error}
+              <span className="font-bold">{error}</span>
             </div>
           )}
 
-          <div className="space-y-4">
+          <div className="grid grid-cols-1 gap-5">
             <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">Nom et Prénom complet</label>
+              <label className="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2 ml-1">Nom et Prénom</label>
               <div className="relative">
-                <User className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                <User className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                 <input 
                   required
                   type="text" 
-                  placeholder="Ex: Omar Bensouda"
-                  className="w-full pl-12 pr-4 py-4 rounded-xl border border-gray-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition-all"
+                  placeholder="Votre nom complet"
+                  className="w-full pl-12 pr-4 py-4 rounded-xl border border-gray-200 focus:border-orange-500 focus:ring-4 focus:ring-orange-50/50 outline-none transition-all font-medium"
                   value={formData.fullname}
                   onChange={e => setFormData({...formData, fullname: e.target.value})}
                 />
@@ -120,41 +120,41 @@ const OrderForm: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">Numéro de téléphone portable</label>
+              <label className="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2 ml-1">Téléphone (Mobile)</label>
               <div className="relative">
-                <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                 <input 
                   required
                   type="tel" 
-                  placeholder="Ex: 06 00 00 00 00"
-                  className="w-full pl-12 pr-4 py-4 rounded-xl border border-gray-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition-all"
+                  placeholder="06 -- -- -- --"
+                  className="w-full pl-12 pr-4 py-4 rounded-xl border border-gray-200 focus:border-orange-500 focus:ring-4 focus:ring-orange-50/50 outline-none transition-all font-medium"
                   value={formData.phone}
                   onChange={e => setFormData({...formData, phone: e.target.value})}
                 />
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2">Ville</label>
+                <label className="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2 ml-1">Ville</label>
                 <input 
                   required
                   type="text" 
-                  placeholder="Ex: Tanger"
-                  className="w-full px-4 py-4 rounded-xl border border-gray-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition-all"
+                  placeholder="Ex: Casablanca"
+                  className="w-full px-4 py-4 rounded-xl border border-gray-200 focus:border-orange-500 focus:ring-4 focus:ring-orange-50/50 outline-none transition-all font-medium"
                   value={formData.city}
                   onChange={e => setFormData({...formData, city: e.target.value})}
                 />
               </div>
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2">Adresse exacte</label>
+                <label className="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2 ml-1">Adresse</label>
                 <div className="relative">
-                  <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                  <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
                   <input 
                     required
                     type="text" 
-                    placeholder="Quartier, N° Maison..."
-                    className="w-full pl-12 pr-4 py-4 rounded-xl border border-gray-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition-all"
+                    placeholder="Quartier, Rue..."
+                    className="w-full pl-12 pr-4 py-4 rounded-xl border border-gray-200 focus:border-orange-500 focus:ring-4 focus:ring-orange-50/50 outline-none transition-all font-medium"
                     value={formData.address}
                     onChange={e => setFormData({...formData, address: e.target.value})}
                   />
@@ -162,11 +162,11 @@ const OrderForm: React.FC = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 pt-2">
+            <div className="grid grid-cols-2 gap-5">
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2">Taille</label>
+                <label className="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2 ml-1">Taille</label>
                 <select 
-                  className="w-full px-4 py-4 rounded-xl border border-gray-200 bg-white focus:border-orange-500 outline-none font-bold cursor-pointer"
+                  className="w-full px-4 py-4 rounded-xl border border-gray-200 bg-white focus:border-orange-500 outline-none font-bold appearance-none cursor-pointer"
                   value={formData.size}
                   onChange={e => setFormData({...formData, size: e.target.value})}
                 >
@@ -178,9 +178,9 @@ const OrderForm: React.FC = () => {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2">Couleur</label>
+                <label className="block text-xs font-black text-gray-500 uppercase tracking-widest mb-2 ml-1">Couleur</label>
                 <select 
-                  className="w-full px-4 py-4 rounded-xl border border-gray-200 bg-white focus:border-orange-500 outline-none font-bold cursor-pointer"
+                  className="w-full px-4 py-4 rounded-xl border border-gray-200 bg-white focus:border-orange-500 outline-none font-bold appearance-none cursor-pointer"
                   value={formData.color}
                   onChange={e => setFormData({...formData, color: e.target.value})}
                 >
@@ -196,25 +196,28 @@ const OrderForm: React.FC = () => {
           <button 
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-green-600 hover:bg-green-700 text-white py-5 rounded-2xl font-black text-xl flex items-center justify-center gap-3 shadow-xl transition-all disabled:opacity-70 disabled:cursor-not-allowed active:scale-95 group"
+            className="w-full bg-orange-600 hover:bg-orange-700 text-white py-5 rounded-2xl font-black text-xl flex items-center justify-center gap-3 shadow-xl transition-all active:scale-95 disabled:opacity-70"
           >
             {isSubmitting ? (
-              <span className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></span>
+              <span className="flex items-center gap-2">
+                <span className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></span>
+                Traitement...
+              </span>
             ) : (
               <>
-                <ShoppingBag className="group-hover:bounce" />
-                COMMANDER - 299 DH
+                <ShoppingBag />
+                VALIDER MA COMMANDE
               </>
             )}
           </button>
 
-          <div className="flex flex-col items-center justify-center gap-2 pt-4 border-t border-gray-100">
-            <p className="flex items-center gap-2 text-green-700 font-extrabold text-sm text-center">
-              <ShieldCheck size={20} />
-              PAIEMENT À LA RÉCEPTION APRÈS VÉRIFICATION
-            </p>
-            <p className="text-gray-400 text-[10px] text-center uppercase tracking-tighter">
-              Vos données sont protégées et ne seront jamais partagées.
+          <div className="pt-4 flex flex-col items-center gap-3">
+            <div className="flex items-center gap-4">
+              <img src="https://cdn-icons-png.flaticon.com/128/11461/11461329.png" alt="COD" className="h-8 opacity-70" />
+              <img src="https://cdn-icons-png.flaticon.com/128/9562/9562913.png" alt="Secure" className="h-8 opacity-70" />
+            </div>
+            <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest text-center">
+              Paiement à la livraison après vérification de la marchandise
             </p>
           </div>
         </form>
