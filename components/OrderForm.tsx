@@ -1,6 +1,9 @@
 
 import React, { useState } from 'react';
-import { User, Phone, MapPin, CheckCircle2, ShoppingBag, ShieldCheck } from 'lucide-react';
+import { User, Phone, MapPin, CheckCircle2, ShoppingBag, ShieldCheck, AlertCircle } from 'lucide-react';
+
+// URL de votre script Google Apps
+const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbyc8Cw6zwWi8AyWh6gOT9sForbEIljFssxPwoRMI8Id-nWW3E363UL7QyeySan0BZUtqA/exec';
 
 const OrderForm: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -14,15 +17,45 @@ const OrderForm: React.FC = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    // Simulation de l'envoi de la commande
-    setTimeout(() => {
+    setError(null);
+
+    try {
+      // Pour éviter les problèmes de CORS avec Google Apps Script,
+      // on utilise URLSearchParams qui envoie les données comme un formulaire standard.
+      const params = new URLSearchParams();
+      params.append('fullname', formData.fullname);
+      params.append('phone', formData.phone);
+      params.append('city', formData.city);
+      params.append('address', formData.address);
+      params.append('size', formData.size);
+      params.append('color', formData.color);
+
+      await fetch(GOOGLE_SHEET_URL, {
+        method: 'POST',
+        mode: 'no-cors', // Indispensable pour GAS
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: params.toString(),
+      });
+
+      // Avec no-cors, on ne peut pas lire la réponse, mais si l'appel fetch ne crash pas,
+      // la requête est partie. On attend un petit délai pour le confort visuel.
+      setTimeout(() => {
+        setIsSubmitting(false);
+        setIsSuccess(true);
+      }, 800);
+
+    } catch (err) {
+      console.error("Erreur d'envoi:", err);
+      setError("Impossible d'envoyer la commande. Vérifiez votre connexion ou contactez-nous.");
       setIsSubmitting(false);
-      setIsSuccess(true);
-    }, 1500);
+    }
   };
 
   if (isSuccess) {
@@ -32,7 +65,7 @@ const OrderForm: React.FC = () => {
           <CheckCircle2 size={80} className="text-green-500 mx-auto mb-6" />
           <h2 className="text-3xl font-bold text-gray-900 mb-4">Commande Reçue !</h2>
           <p className="text-gray-600 mb-8">
-            Merci {formData.fullname.split(' ')[0]}. Votre commande a bien été enregistrée. Notre service client vous appellera sur le <strong>{formData.phone}</strong> dans les prochaines heures pour confirmer votre adresse et lancer l'expédition.
+            Merci {formData.fullname.split(' ')[0]}. Votre commande a bien été enregistrée. Notre équipe vous appellera sur le <strong>{formData.phone}</strong> pour confirmer l'expédition.
           </p>
           <button 
             onClick={() => setIsSuccess(false)}
@@ -50,10 +83,17 @@ const OrderForm: React.FC = () => {
       <div className="max-w-2xl mx-auto">
         <div className="text-center mb-10">
           <h2 className="text-3xl font-black text-gray-900 mb-3">🛍️ Commandez maintenant</h2>
-          <p className="text-gray-600 font-medium">Livraison gratuite partout au Maroc. Payez seulement à la réception !</p>
+          <p className="text-gray-600 font-medium">Livraison Gratuite & Paiement à la réception partout au Maroc</p>
         </div>
 
         <form onSubmit={handleSubmit} className="bg-white p-6 md:p-10 rounded-3xl shadow-2xl space-y-6 border border-gray-100">
+          {error && (
+            <div className="bg-red-50 border border-red-100 text-red-600 p-4 rounded-xl flex items-center gap-3 text-sm">
+              <AlertCircle size={20} />
+              {error}
+            </div>
+          )}
+
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-bold text-gray-700 mb-2">Nom et Prénom</label>
@@ -62,7 +102,7 @@ const OrderForm: React.FC = () => {
                 <input 
                   required
                   type="text" 
-                  placeholder="Ex: Amine El Amrani"
+                  placeholder="Ex: Ahmed Alaoui"
                   className="w-full pl-12 pr-4 py-4 rounded-xl border border-gray-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition-all"
                   value={formData.fullname}
                   onChange={e => setFormData({...formData, fullname: e.target.value})}
@@ -71,7 +111,7 @@ const OrderForm: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">Numéro de téléphone (WhatsApp)</label>
+              <label className="block text-sm font-bold text-gray-700 mb-2">Numéro de téléphone</label>
               <div className="relative">
                 <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
                 <input 
@@ -83,7 +123,6 @@ const OrderForm: React.FC = () => {
                   onChange={e => setFormData({...formData, phone: e.target.value})}
                 />
               </div>
-              <p className="text-[10px] text-gray-400 mt-1 ml-1">* Nous vous contacterons sur ce numéro pour confirmer la commande.</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -92,20 +131,20 @@ const OrderForm: React.FC = () => {
                 <input 
                   required
                   type="text" 
-                  placeholder="Ex: Casablanca, Rabat, Marrakech..."
+                  placeholder="Ex: Casablanca"
                   className="w-full px-4 py-4 rounded-xl border border-gray-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition-all"
                   value={formData.city}
                   onChange={e => setFormData({...formData, city: e.target.value})}
                 />
               </div>
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2">Adresse de livraison</label>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Adresse</label>
                 <div className="relative">
                   <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
                   <input 
                     required
                     type="text" 
-                    placeholder="Quartier, Rue, N° Appartement"
+                    placeholder="Quartier, N° Maison"
                     className="w-full pl-12 pr-4 py-4 rounded-xl border border-gray-200 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition-all"
                     value={formData.address}
                     onChange={e => setFormData({...formData, address: e.target.value})}
@@ -161,12 +200,9 @@ const OrderForm: React.FC = () => {
           </button>
 
           <div className="flex flex-col items-center justify-center gap-2 pt-4 border-t border-gray-100">
-            <p className="flex items-center gap-2 text-green-700 font-bold text-sm">
+            <p className="flex items-center gap-2 text-green-700 font-bold text-sm text-center">
               <ShieldCheck size={20} />
-              ✅ Paiement à la livraison (COD) – 100% sécurisé
-            </p>
-            <p className="text-gray-400 text-[11px] italic text-center leading-tight">
-              Service disponible dans tout le Royaume. Vous ne payez qu'après avoir vérifié la qualité de votre produit.
+              ✅ Paiement à la livraison – Vérifiez avant de payer
             </p>
           </div>
         </form>
