@@ -14,7 +14,7 @@ const ProductHero: React.FC = () => {
   const [mainImage, setMainImage] = useState(images[0]);
 
   return (
-    <section className="bg-white pt-8 pb-12 px-4 md:px-8 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+    <section className="bg-white pt-6 pb-12 px-4 md:px-8 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
       {/* Multimedia Section */}
       <div className="flex flex-col gap-4">
         <div className="rounded-3xl overflow-hidden shadow-2xl bg-gray-100 aspect-[4/5] relative group">
@@ -23,18 +23,18 @@ const ProductHero: React.FC = () => {
             alt="Hoodie Elite Main" 
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
-          <div className="absolute top-6 right-6 bg-orange-600 text-white px-4 py-2 rounded-full text-sm font-black shadow-xl animate-bounce">
+          <div className="absolute top-4 right-4 bg-orange-600 text-white px-3 py-1.5 rounded-full text-xs font-black shadow-xl animate-bounce">
             -50% OFF
           </div>
         </div>
         
-        <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide">
+        <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
           {images.map((img, idx) => (
             <button 
               key={idx}
               onClick={() => setMainImage(img)}
-              className={`w-20 h-24 flex-shrink-0 rounded-xl overflow-hidden border-2 transition-all duration-300 ${
-                mainImage === img ? 'border-orange-500 scale-110 shadow-lg' : 'border-transparent opacity-70 hover:opacity-100'
+              className={`w-16 h-20 flex-shrink-0 rounded-xl overflow-hidden border-2 transition-all duration-300 ${
+                mainImage === img ? 'border-orange-500 scale-105 shadow-md' : 'border-transparent opacity-60 hover:opacity-100'
               }`}
             >
               <img src={img} alt={`Thumbnail ${idx}`} className="w-full h-full object-cover" />
@@ -44,63 +44,63 @@ const ProductHero: React.FC = () => {
       </div>
 
       {/* Content Section */}
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-6 md:gap-8">
         <div>
-          <div className="flex items-center gap-1 mb-3">
+          <div className="flex items-center gap-1 mb-2">
             {[...Array(5)].map((_, i) => (
-              <Star key={i} size={18} className="fill-yellow-400 text-yellow-400" />
+              <Star key={i} size={14} className="fill-yellow-400 text-yellow-400" />
             ))}
-            <span className="text-sm font-bold text-gray-400 ml-2 tracking-wide uppercase">1,248 avis vérifiés</span>
+            <span className="text-[10px] font-bold text-gray-400 ml-2 tracking-widest uppercase">1,248 avis vérifiés</span>
           </div>
-          <h1 className="text-4xl md:text-6xl font-black text-gray-900 leading-[1.1] tracking-tight">
+          <h1 className="text-3xl md:text-5xl font-black text-gray-900 leading-tight tracking-tight">
             Hoodie Elite™ <br/> <span className="text-orange-600">Confort Absolu.</span>
           </h1>
         </div>
 
-        <p className="text-xl text-gray-600 leading-relaxed font-medium">
-          Le hoodie qui redéfinit vos standards. Coton premium <span className="text-gray-900 font-bold">400 GSM</span> pour une douceur qui dure toute la vie.
+        <p className="text-lg text-gray-600 leading-relaxed font-medium">
+          Le hoodie qui redéfinit vos standards. Coton premium <span className="text-gray-900 font-bold">400 GSM</span> pour une douceur inégalée.
         </p>
 
-        <div className="space-y-4">
+        <div className="space-y-3">
           {[
             "Coton Premium Brossé - Ultra Doux",
             "Coupe Moderne & Unisexe",
             "Garantie Satisfait ou Échangé"
           ].map((text, i) => (
-            <div key={i} className="flex items-center gap-3 text-gray-800 font-bold">
+            <div key={i} className="flex items-center gap-3 text-gray-800 font-bold text-sm">
               <div className="bg-green-100 p-1 rounded-full text-green-600">
-                <CheckCircle2 size={18} />
+                <CheckCircle2 size={16} />
               </div>
               <span>{text}</span>
             </div>
           ))}
         </div>
 
-        {/* PRICE CARD - CENTERED & ANIMATED */}
-        <div className="bg-gray-50 p-8 rounded-[40px] border border-gray-100 shadow-inner text-center">
-          <div className="flex flex-col items-center justify-center gap-1 mb-8">
-             <div className="flex items-center gap-4 animate-pulse">
-                <span className="text-6xl font-black text-gray-900 tracking-tighter">299 DH</span>
-                <span className="text-3xl text-red-600 line-through font-bold opacity-80 decoration-[3px]">599 DH</span>
+        {/* PRICE CARD - COMPACT VERSION */}
+        <div className="bg-gray-50 p-5 md:p-7 rounded-[32px] border border-gray-100 shadow-inner text-center max-w-md mx-auto lg:mx-0 w-full">
+          <div className="flex flex-col items-center justify-center gap-1 mb-5">
+             <div className="flex items-center gap-3">
+                <span className="text-4xl md:text-5xl font-black text-gray-900 tracking-tighter">299 DH</span>
+                <span className="text-xl md:text-2xl text-red-600 line-through font-bold opacity-70 decoration-[2px]">599 DH</span>
              </div>
-             <p className="text-green-600 font-black text-sm uppercase tracking-widest mt-2">Économisez 300 DH aujourd'hui</p>
+             <p className="text-green-600 font-black text-[10px] uppercase tracking-[0.15em] mt-1">Économisez 300 DH aujourd'hui</p>
           </div>
           
           <a 
             href="#order-form" 
-            className="w-full bg-orange-600 hover:bg-orange-700 text-white py-6 rounded-2xl font-black text-2xl flex items-center justify-center gap-4 shadow-2xl shadow-orange-200 transition-all active:scale-95 group relative overflow-hidden"
+            className="w-full bg-orange-600 hover:bg-orange-700 text-white py-4 rounded-2xl font-black text-lg flex items-center justify-center gap-3 shadow-xl shadow-orange-100 transition-all active:scale-95 group relative overflow-hidden"
           >
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shimmer_2s_infinite]"></div>
-            <ShoppingBag size={28} />
+            <ShoppingBag size={22} />
             Commander maintenant
           </a>
           
-          <div className="flex items-center justify-center gap-2 mt-6">
-            <span className="relative flex h-3 w-3">
+          <div className="flex items-center justify-center gap-2 mt-4">
+            <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-red-600"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-red-600"></span>
             </span>
-            <p className="text-red-600 font-black text-sm uppercase tracking-tighter">
+            <p className="text-red-600 font-black text-[10px] uppercase tracking-tight">
               Attention : Plus que 7 articles en stock !
             </p>
           </div>
