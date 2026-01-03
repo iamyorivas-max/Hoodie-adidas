@@ -59,7 +59,7 @@ const OrderForm: React.FC = () => {
 
     const cleanPhone = formData.phone.replace(/\s/g, '');
     if (cleanPhone.length < 10) {
-      setError("Numéro de téléphone invalide (10 chiffres minimum).");
+      setError("Numéro de téléphone invalide.");
       setIsSubmitting(false);
       return;
     }
@@ -67,7 +67,7 @@ const OrderForm: React.FC = () => {
     try {
       const params = new URLSearchParams();
       
-      // On prépare les données pour qu'elles correspondent aux colonnes probables de votre Excel
+      // On multiplie les chances de succès en envoyant le prix sous tous les noms possibles
       const dataToSend = {
         fullname: formData.fullname.trim(),
         phone: formData.phone.trim(),
@@ -77,10 +77,15 @@ const OrderForm: React.FC = () => {
         details: formatVariantsString(),
         size: formData.variants.map(v => v.size).join(', '),
         color: formData.variants.map(v => v.color).join(', '),
-        // On envoie le montant sous plusieurs noms de colonnes pour être sûr que l'un d'eux soit capté par votre Excel
+        
+        // --- COLONNES DE PRIX (Vérifiez l'orthographe exacte dans votre Excel) ---
         totalPrice: `${selectedOffer.price} DH`,
+        total_price: `${selectedOffer.price} DH`,
         montant_total: `${selectedOffer.price} DH`,
+        prix_total: `${selectedOffer.price} DH`,
         total: `${selectedOffer.price} DH`,
+        prix: `${selectedOffer.price} DH`,
+        
         date: new Date().toLocaleString()
       };
 
@@ -92,6 +97,7 @@ const OrderForm: React.FC = () => {
       const timeoutId = setTimeout(() => controller.abort(), 8000);
 
       try {
+        // Soumission vers Google Sheets
         await fetch(GOOGLE_SHEET_URL, {
           method: 'POST',
           mode: 'no-cors',
@@ -100,19 +106,20 @@ const OrderForm: React.FC = () => {
           signal: controller.signal
         });
         clearTimeout(timeoutId);
-      } catch (fetchErr) {
-        console.warn("Fetch warning (no-cors):", fetchErr);
+      } catch (fErr) {
+        console.warn("Fetch background info:", fErr);
       }
 
+      // Succès visuel
       setTimeout(() => {
         setIsSuccess(true);
         setIsSubmitting(false);
-        window.scrollTo({ top: document.getElementById('order-form')?.offsetTop, behavior: 'smooth' });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }, 800);
 
     } catch (err) {
-      console.error("Erreur critique:", err);
-      setError("Une erreur est survenue. Vérifiez votre connexion.");
+      console.error("Critical error:", err);
+      setError("Erreur de connexion. Réessayez.");
       setIsSubmitting(false);
     }
   };
@@ -132,8 +139,8 @@ const OrderForm: React.FC = () => {
           <h2 className="text-2xl font-black text-gray-900 mb-2">Commande Enregistrée !</h2>
           <p className="text-gray-600 mb-8 font-medium">
             Merci <span className="text-gray-900 font-bold">{formData.fullname}</span>. <br/>
-            Notre équipe vous contactera pour confirmer la livraison de votre pack : <br/>
-            <span className="text-orange-600 font-bold">{selectedOffer.name} ({selectedOffer.price} DH)</span>
+            Nous vous appellerons pour confirmer l'envoi de votre pack <span className="text-orange-600 font-bold">{selectedOffer.name}</span>.<br/>
+            Montant à payer : <span className="font-bold">{selectedOffer.price} DH</span>.
           </p>
           <button 
             onClick={() => setIsSuccess(false)} 
@@ -163,6 +170,7 @@ const OrderForm: React.FC = () => {
               </div>
             )}
 
+            {/* 1. SELECTION OFFRE */}
             <div className="space-y-3">
               <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest block ml-2">1. Choisissez votre pack</label>
               <div className="grid grid-cols-1 gap-3">
@@ -206,6 +214,7 @@ const OrderForm: React.FC = () => {
               </div>
             </div>
 
+            {/* 2. PERSONNALISATION */}
             <div className="space-y-3">
               <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest block ml-2">2. Tailles et Couleurs</label>
               <div className="grid grid-cols-1 gap-3">
@@ -237,6 +246,7 @@ const OrderForm: React.FC = () => {
               </div>
             </div>
 
+            {/* 3. INFOS CLIENT */}
             <div className="space-y-4">
               <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest block ml-2">3. Où livrer ?</label>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
