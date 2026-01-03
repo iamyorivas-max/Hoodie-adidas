@@ -13,8 +13,8 @@ interface ItemVariant {
 const OrderForm: React.FC = () => {
   const offers = [
     { id: '1x', name: '1 Hoodie Elite', price: 299, original: 599, badge: null, qty: 1 },
-    { id: '2x', name: 'Pack Duo (2 Hoodies)', price: 499, original: 1198, badge: 'OFFRE POPULAIRE', save: 699, qty: 2 },
-    { id: '3x', name: 'Pack Trio (3 Hoodies)', price: 649, original: 1797, badge: 'MEILLEUR PRIX', save: 1148, qty: 3 },
+    { id: '2x', name: 'Pack Duo (2 Hoodies)', price: 499, original: 1198, badge: 'OFFRE POPULAIRE', save: 99, qty: 2 },
+    { id: '3x', name: 'Pack Trio (3 Hoodies)', price: 649, original: 1797, badge: 'MEILLEUR PRIX', save: 248, qty: 3 },
   ];
 
   const [formData, setFormData] = useState({
