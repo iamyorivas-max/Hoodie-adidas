@@ -1,15 +1,20 @@
 
-import React, { useState } from 'react';
-import { User, Phone, MapPin, CheckCircle2, ShoppingBag, AlertCircle, MessageSquare, Loader2, Sparkles, Zap } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { User, Phone, MapPin, CheckCircle2, ShoppingBag, AlertCircle, MessageSquare, Loader2, Sparkles, Zap, Shirt } from 'lucide-react';
 
 // --- URL DE DÉPLOIEMENT GMAIL ---
 const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbyvTK-hHnk8YcGpeUoOsvY1d260av1W4eLPPCSX8epEs950VpTZjh_rfLed-DDAoEu8pg/exec';
 
+interface ItemVariant {
+  size: string;
+  color: string;
+}
+
 const OrderForm: React.FC = () => {
   const offers = [
-    { id: '1x', name: '1 Hoodie Elite', price: 299, original: 599, badge: null },
-    { id: '2x', name: 'Pack Duo (2 Hoodies)', price: 499, original: 1198, badge: 'OFFRE POPULAIRE', save: 699 },
-    { id: '3x', name: 'Pack Trio (3 Hoodies)', price: 649, original: 1797, badge: 'MEILLEUR PRIX', save: 1148 },
+    { id: '1x', name: '1 Hoodie Elite', price: 299, original: 599, badge: null, qty: 1 },
+    { id: '2x', name: 'Pack Duo (2 Hoodies)', price: 499, original: 1198, badge: 'OFFRE POPULAIRE', save: 699, qty: 2 },
+    { id: '3x', name: 'Pack Trio (3 Hoodies)', price: 649, original: 1797, badge: 'MEILLEUR PRIX', save: 1148, qty: 3 },
   ];
 
   const [formData, setFormData] = useState({
@@ -17,9 +22,8 @@ const OrderForm: React.FC = () => {
     phone: '',
     address: '',
     city: '',
-    size: 'M',
-    color: 'Noir',
-    offer: '1x'
+    offer: '1x',
+    variants: [{ size: 'M', color: 'Noir' }] as ItemVariant[]
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -27,6 +31,25 @@ const OrderForm: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   const selectedOffer = offers.find(o => o.id === formData.offer) || offers[0];
+
+  // Gérer le changement d'offre et mettre à jour le nombre de variantes
+  const handleOfferChange = (offerId: string) => {
+    const offer = offers.find(o => o.id === offerId) || offers[0];
+    const newVariants = Array(offer.qty).fill(null).map((_, i) => (
+      formData.variants[i] || { size: 'M', color: 'Noir' }
+    ));
+    setFormData({ ...formData, offer: offerId, variants: newVariants });
+  };
+
+  const updateVariant = (index: number, field: keyof ItemVariant, value: string) => {
+    const updatedVariants = [...formData.variants];
+    updatedVariants[index] = { ...updatedVariants[index], [field]: value };
+    setFormData({ ...formData, variants: updatedVariants });
+  };
+
+  const formatVariantsString = () => {
+    return formData.variants.map((v, i) => `Art#${i+1}: ${v.size}/${v.color}`).join(' | ');
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,11 +65,14 @@ const OrderForm: React.FC = () => {
 
     try {
       const params = new URLSearchParams();
-      // On ajoute le prix total et l'offre au formulaire envoyé
       const dataToSend = {
-        ...formData,
-        totalPrice: `${selectedOffer.price} DH`,
-        offerName: selectedOffer.name
+        fullname: formData.fullname,
+        phone: formData.phone,
+        address: formData.address,
+        city: formData.city,
+        offer: selectedOffer.name,
+        details: formatVariantsString(),
+        totalPrice: `${selectedOffer.price} DH`
       };
 
       Object.entries(dataToSend).forEach(([key, value]) => {
@@ -73,7 +99,7 @@ const OrderForm: React.FC = () => {
   };
 
   const sendWhatsApp = () => {
-    const text = `Bonjour, je commande le Hoodie Elite:\nOffre: ${selectedOffer.name}\nPrix: ${selectedOffer.price} DH\nNom: ${formData.fullname}\nTél: ${formData.phone}\nVille: ${formData.city}\nTaille: ${formData.size}\nCouleur: ${formData.color}`;
+    const text = `Bonjour, je commande le Hoodie Elite:\nOffre: ${selectedOffer.name}\nPrix: ${selectedOffer.price} DH\nArticles: ${formatVariantsString()}\nNom: ${formData.fullname}\nTél: ${formData.phone}\nVille: ${formData.city}`;
     window.open(`https://wa.me/212600000000?text=${encodeURIComponent(text)}`, '_blank');
   };
 
@@ -86,7 +112,8 @@ const OrderForm: React.FC = () => {
           </div>
           <h2 className="text-3xl font-black text-gray-900 mb-4">Commande Reçue !</h2>
           <p className="text-gray-600 mb-8 text-lg">
-            Merci <strong>{formData.fullname}</strong>. Votre commande pour <strong>{selectedOffer.name}</strong> a été enregistrée. Nous vous appellerons au <strong>{formData.phone}</strong> pour confirmer.
+            Merci <strong>{formData.fullname}</strong>. Votre commande pour <strong>{selectedOffer.name}</strong> a été enregistrée.
+            <br/><span className="text-sm opacity-75">({formatVariantsString()})</span>
           </p>
           <button onClick={() => setIsSuccess(false)} className="text-green-700 font-bold hover:underline">Faire un autre achat</button>
         </div>
@@ -103,7 +130,7 @@ const OrderForm: React.FC = () => {
             <p className="opacity-90 font-medium text-sm">Paiement à la livraison & Livraison Gratuite</p>
           </div>
 
-          <form onSubmit={handleSubmit} className="p-5 md:p-8 space-y-6">
+          <form onSubmit={handleSubmit} className="p-5 md:p-8 space-y-8">
             {error && (
               <div className="bg-red-50 border-2 border-red-100 text-red-600 p-4 rounded-2xl flex items-center gap-3">
                 <AlertCircle size={20} className="shrink-0" />
@@ -113,7 +140,7 @@ const OrderForm: React.FC = () => {
 
             {/* OFFERS SELECTION */}
             <div className="space-y-3">
-              <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1 block ml-2">Sélectionnez votre Offre</label>
+              <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1 block ml-2">1. Sélectionnez votre Offre</label>
               <div className="grid grid-cols-1 gap-3">
                 {offers.map((offer) => (
                   <label 
@@ -130,7 +157,7 @@ const OrderForm: React.FC = () => {
                       className="hidden" 
                       value={offer.id} 
                       checked={formData.offer === offer.id}
-                      onChange={() => setFormData({...formData, offer: offer.id})}
+                      onChange={() => handleOfferChange(offer.id)}
                     />
                     <div className="flex items-center gap-4">
                       <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${formData.offer === offer.id ? 'border-orange-500 bg-orange-500' : 'border-gray-300'}`}>
@@ -156,55 +183,71 @@ const OrderForm: React.FC = () => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 gap-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1 block ml-2">Nom & Prénom</label>
+            {/* DYNAMIC VARIANTS SECTION */}
+            <div className="space-y-4 animate-in fade-in slide-in-from-top-4 duration-500">
+              <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1 block ml-2">2. Personnalisez vos articles</label>
+              <div className="grid grid-cols-1 gap-4">
+                {formData.variants.map((variant, index) => (
+                  <div key={index} className="p-5 rounded-2xl bg-gray-50 border border-gray-100 relative">
+                    <div className="flex items-center gap-2 mb-4">
+                      <div className="w-6 h-6 rounded-full bg-gray-900 text-white text-[10px] font-black flex items-center justify-center">
+                        {index + 1}
+                      </div>
+                      <span className="text-xs font-black text-gray-900 uppercase tracking-wider">Article n°{index + 1}</span>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-[9px] font-bold text-gray-400 uppercase mb-1 block">Taille</label>
+                        <select 
+                          className="w-full px-4 py-3 rounded-xl border-2 border-white bg-white font-black text-xs md:text-sm outline-none shadow-sm focus:border-orange-500 transition-all"
+                          value={variant.size} 
+                          onChange={e => updateVariant(index, 'size', e.target.value)}
+                        >
+                          <option value="S">S</option><option value="M">M</option><option value="L">L</option><option value="XL">XL</option><option value="XXL">XXL</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="text-[9px] font-bold text-gray-400 uppercase mb-1 block">Couleur</label>
+                        <select 
+                          className="w-full px-4 py-3 rounded-xl border-2 border-white bg-white font-black text-xs md:text-sm outline-none shadow-sm focus:border-orange-500 transition-all"
+                          value={variant.color} 
+                          onChange={e => updateVariant(index, 'color', e.target.value)}
+                        >
+                          <option value="Noir">Noir</option><option value="Gris">Gris</option><option value="Bleu">Bleu</option><option value="Vert">Vert</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* PERSONAL INFO */}
+            <div className="space-y-4">
+              <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1 block ml-2">3. Informations de livraison</label>
+              <div className="grid grid-cols-1 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="relative">
                     <User className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
                     <input required type="text" placeholder="Nom complet" className="w-full pl-11 pr-4 py-3.5 rounded-xl border-2 border-gray-100 focus:border-orange-500 outline-none font-bold text-sm" value={formData.fullname} onChange={e => setFormData({...formData, fullname: e.target.value})} />
                   </div>
-                </div>
-                <div>
-                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1 block ml-2">Téléphone</label>
                   <div className="relative">
                     <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
-                    <input required type="tel" placeholder="06 -- -- -- --" className="w-full pl-11 pr-4 py-3.5 rounded-xl border-2 border-gray-100 focus:border-orange-500 outline-none font-bold text-sm" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} />
+                    <input required type="tel" placeholder="Téléphone (06 --)" className="w-full pl-11 pr-4 py-3.5 rounded-xl border-2 border-gray-100 focus:border-orange-500 outline-none font-bold text-sm" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} />
                   </div>
                 </div>
-              </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1 block ml-2">Ville</label>
-                  <input required type="text" placeholder="Ex: Casablanca" className="w-full px-5 py-3.5 rounded-xl border-2 border-gray-100 focus:border-orange-500 outline-none font-bold text-sm" value={formData.city} onChange={e => setFormData({...formData, city: e.target.value})} />
-                </div>
-                <div>
-                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1 block ml-2">Adresse</label>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <input required type="text" placeholder="Ville" className="w-full px-5 py-3.5 rounded-xl border-2 border-gray-100 focus:border-orange-500 outline-none font-bold text-sm" value={formData.city} onChange={e => setFormData({...formData, city: e.target.value})} />
                   <div className="relative">
                     <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
                     <input required type="text" placeholder="Adresse complète" className="w-full pl-11 pr-4 py-3.5 rounded-xl border-2 border-gray-100 focus:border-orange-500 outline-none font-bold text-sm" value={formData.address} onChange={e => setFormData({...formData, address: e.target.value})} />
                   </div>
                 </div>
               </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1 block ml-2">Taille habituelle</label>
-                  <select className="w-full px-5 py-3.5 rounded-xl border-2 border-gray-100 bg-gray-50 font-black text-sm outline-none cursor-pointer" value={formData.size} onChange={e => setFormData({...formData, size: e.target.value})}>
-                    <option value="S">S</option><option value="M">M</option><option value="L">L</option><option value="XL">XL</option><option value="XXL">XXL</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1 block ml-2">Couleur</label>
-                  <select className="w-full px-5 py-3.5 rounded-xl border-2 border-gray-100 bg-gray-50 font-black text-sm outline-none cursor-pointer" value={formData.color} onChange={e => setFormData({...formData, color: e.target.value})}>
-                    <option value="Noir">Noir</option><option value="Gris">Gris</option><option value="Bleu">Bleu</option><option value="Vert">Vert</option>
-                  </select>
-                </div>
-              </div>
             </div>
 
-            <div className="pt-2">
+            <div className="pt-4">
                <button 
                 type="submit" 
                 disabled={isSubmitting} 
