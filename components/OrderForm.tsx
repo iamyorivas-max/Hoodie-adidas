@@ -74,12 +74,13 @@ const OrderForm: React.FC = () => {
         address: formData.address.trim(),
         city: formData.city.trim(),
         offer: selectedOffer.name,
-        // 'details' contient tout le récapitulatif
         details: formatVariantsString(),
-        // 'size' et 'color' envoient les listes pour compatibilité avec vos anciennes colonnes
         size: formData.variants.map(v => v.size).join(', '),
         color: formData.variants.map(v => v.color).join(', '),
+        // On envoie le montant sous plusieurs noms de colonnes pour être sûr que l'un d'eux soit capté par votre Excel
         totalPrice: `${selectedOffer.price} DH`,
+        montant_total: `${selectedOffer.price} DH`,
+        total: `${selectedOffer.price} DH`,
         date: new Date().toLocaleString()
       };
 
@@ -100,7 +101,7 @@ const OrderForm: React.FC = () => {
         });
         clearTimeout(timeoutId);
       } catch (fetchErr) {
-        console.warn("Fetch warning:", fetchErr);
+        console.warn("Fetch warning (no-cors):", fetchErr);
       }
 
       setTimeout(() => {
@@ -132,7 +133,7 @@ const OrderForm: React.FC = () => {
           <p className="text-gray-600 mb-8 font-medium">
             Merci <span className="text-gray-900 font-bold">{formData.fullname}</span>. <br/>
             Notre équipe vous contactera pour confirmer la livraison de votre pack : <br/>
-            <span className="text-orange-600 font-bold">{selectedOffer.name}</span>
+            <span className="text-orange-600 font-bold">{selectedOffer.name} ({selectedOffer.price} DH)</span>
           </p>
           <button 
             onClick={() => setIsSuccess(false)} 
