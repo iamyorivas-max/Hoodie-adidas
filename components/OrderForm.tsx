@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import { User, Phone, MapPin, CheckCircle2, ShoppingBag, AlertCircle, MessageSquare, Loader2, Sparkles } from 'lucide-react';
 
-// --- URL DE DÉPLOIEMENT GMAIL ---
 const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbyvTK-hHnk8YcGpeUoOsvY1d260av1W4eLPPCSX8epEs950VpTZjh_rfLed-DDAoEu8pg/exec';
 
 interface ItemVariant {
@@ -13,8 +12,8 @@ interface ItemVariant {
 const OrderForm: React.FC = () => {
   const offers = [
     { id: '1x', name: '1 Hoodie Elite', price: 299, original: 599, badge: null, qty: 1 },
-    { id: '2x', name: 'Pack Duo (2 Hoodies)', price: 499, original: 1198, badge: 'OFFRE POPULAIRE', save: 99, qty: 2 },
-    { id: '3x', name: 'Pack Trio (3 Hoodies)', price: 649, original: 1797, badge: 'MEILLEUR PRIX', save: 248, qty: 3 },
+    { id: '2x', name: 'Pack Duo (2 Hoodies)', price: 499, original: 1198, badge: 'OFFRE POPULAIRE', save: 699, qty: 2 },
+    { id: '3x', name: 'Pack Trio (3 Hoodies)', price: 649, original: 1797, badge: 'MEILLEUR PRIX', save: 1148, qty: 3 },
   ];
 
   const [formData, setFormData] = useState({
@@ -67,7 +66,6 @@ const OrderForm: React.FC = () => {
     try {
       const params = new URLSearchParams();
       
-      // On multiplie les chances de succès en envoyant le prix sous tous les noms possibles
       const dataToSend = {
         fullname: formData.fullname.trim(),
         phone: formData.phone.trim(),
@@ -77,15 +75,9 @@ const OrderForm: React.FC = () => {
         details: formatVariantsString(),
         size: formData.variants.map(v => v.size).join(', '),
         color: formData.variants.map(v => v.color).join(', '),
-        
-        // --- COLONNES DE PRIX (Vérifiez l'orthographe exacte dans votre Excel) ---
         totalPrice: `${selectedOffer.price} DH`,
         total_price: `${selectedOffer.price} DH`,
         montant_total: `${selectedOffer.price} DH`,
-        prix_total: `${selectedOffer.price} DH`,
-        total: `${selectedOffer.price} DH`,
-        prix: `${selectedOffer.price} DH`,
-        
         date: new Date().toLocaleString()
       };
 
@@ -93,24 +85,17 @@ const OrderForm: React.FC = () => {
         params.append(key, String(value));
       });
 
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 8000);
-
       try {
-        // Soumission vers Google Sheets
         await fetch(GOOGLE_SHEET_URL, {
           method: 'POST',
           mode: 'no-cors',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: params.toString(),
-          signal: controller.signal
+          body: params.toString()
         });
-        clearTimeout(timeoutId);
       } catch (fErr) {
         console.warn("Fetch background info:", fErr);
       }
 
-      // Succès visuel
       setTimeout(() => {
         setIsSuccess(true);
         setIsSubmitting(false);
@@ -142,12 +127,7 @@ const OrderForm: React.FC = () => {
             Nous vous appellerons pour confirmer l'envoi de votre pack <span className="text-orange-600 font-bold">{selectedOffer.name}</span>.<br/>
             Montant à payer : <span className="font-bold">{selectedOffer.price} DH</span>.
           </p>
-          <button 
-            onClick={() => setIsSuccess(false)} 
-            className="bg-gray-900 text-white px-8 py-3 rounded-xl font-bold hover:bg-gray-800 transition-all"
-          >
-            Faire une autre commande
-          </button>
+          <button onClick={() => setIsSuccess(false)} className="bg-gray-900 text-white px-8 py-3 rounded-xl font-bold hover:bg-gray-800 transition-all">Faire une autre commande</button>
         </div>
       </section>
     );
@@ -170,27 +150,12 @@ const OrderForm: React.FC = () => {
               </div>
             )}
 
-            {/* 1. SELECTION OFFRE */}
             <div className="space-y-3">
               <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest block ml-2">1. Choisissez votre pack</label>
               <div className="grid grid-cols-1 gap-3">
                 {offers.map((offer) => (
-                  <label 
-                    key={offer.id}
-                    className={`relative flex items-center justify-between p-4 rounded-2xl border-2 transition-all cursor-pointer ${
-                      formData.offer === offer.id 
-                      ? 'border-orange-500 bg-orange-50 ring-2 ring-orange-200' 
-                      : 'border-gray-100 bg-white hover:border-gray-200'
-                    }`}
-                  >
-                    <input 
-                      type="radio" 
-                      name="offer" 
-                      className="hidden" 
-                      value={offer.id} 
-                      checked={formData.offer === offer.id}
-                      onChange={() => handleOfferChange(offer.id)}
-                    />
+                  <label key={offer.id} className={`relative flex items-center justify-between p-4 rounded-2xl border-2 transition-all cursor-pointer ${formData.offer === offer.id ? 'border-orange-500 bg-orange-50 ring-2 ring-orange-200' : 'border-gray-100 bg-white hover:border-gray-200'}`}>
+                    <input type="radio" name="offer" className="hidden" value={offer.id} checked={formData.offer === offer.id} onChange={() => handleOfferChange(offer.id)} />
                     <div className="flex items-center gap-4">
                       <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${formData.offer === offer.id ? 'border-orange-500 bg-orange-500' : 'border-gray-300'}`}>
                         {formData.offer === offer.id && <div className="w-2 h-2 rounded-full bg-white" />}
@@ -214,30 +179,17 @@ const OrderForm: React.FC = () => {
               </div>
             </div>
 
-            {/* 2. PERSONNALISATION */}
             <div className="space-y-3">
               <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest block ml-2">2. Tailles et Couleurs</label>
               <div className="grid grid-cols-1 gap-3">
                 {formData.variants.map((variant, index) => (
                   <div key={index} className="p-4 rounded-2xl bg-gray-50 border border-gray-100 flex flex-wrap md:flex-nowrap items-center gap-4">
-                    <div className="w-7 h-7 rounded-full bg-orange-100 text-orange-600 text-[10px] font-black flex items-center justify-center shrink-0">
-                      #{index + 1}
-                    </div>
+                    <div className="w-7 h-7 rounded-full bg-orange-100 text-orange-600 text-[10px] font-black flex items-center justify-center shrink-0">#{index + 1}</div>
                     <div className="flex-grow grid grid-cols-2 gap-3">
-                      <select 
-                        required
-                        className="w-full px-3 py-2.5 rounded-xl border-2 border-white bg-white font-black text-xs outline-none shadow-sm focus:border-orange-500"
-                        value={variant.size} 
-                        onChange={e => updateVariant(index, 'size', e.target.value)}
-                      >
+                      <select required className="w-full px-3 py-2.5 rounded-xl border-2 border-white bg-white font-black text-xs outline-none shadow-sm focus:border-orange-500" value={variant.size} onChange={e => updateVariant(index, 'size', e.target.value)}>
                         {['S','M','L','XL','XXL'].map(s => <option key={s} value={s}>Taille {s}</option>)}
                       </select>
-                      <select 
-                        required
-                        className="w-full px-3 py-2.5 rounded-xl border-2 border-white bg-white font-black text-xs outline-none shadow-sm focus:border-orange-500"
-                        value={variant.color} 
-                        onChange={e => updateVariant(index, 'color', e.target.value)}
-                      >
+                      <select required className="w-full px-3 py-2.5 rounded-xl border-2 border-white bg-white font-black text-xs outline-none shadow-sm focus:border-orange-500" value={variant.color} onChange={e => updateVariant(index, 'color', e.target.value)}>
                         {['Noir','Gris','Bleu','Vert'].map(c => <option key={c} value={c}>{c}</option>)}
                       </select>
                     </div>
@@ -246,7 +198,6 @@ const OrderForm: React.FC = () => {
               </div>
             </div>
 
-            {/* 3. INFOS CLIENT */}
             <div className="space-y-4">
               <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest block ml-2">3. Où livrer ?</label>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -267,35 +218,16 @@ const OrderForm: React.FC = () => {
             </div>
 
             <div className="pt-2">
-               <button 
-                type="submit" 
-                disabled={isSubmitting} 
-                className="w-full bg-orange-600 hover:bg-orange-700 text-white py-4 rounded-2xl font-black text-lg flex flex-col items-center justify-center gap-1 shadow-xl shadow-orange-100 transition-all active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed group"
-              >
-                {isSubmitting ? (
-                  <div className="flex items-center gap-3">
-                    <Loader2 className="animate-spin" size={24} />
-                    <span>Traitement...</span>
-                  </div>
-                ) : (
-                  <>
-                    <div className="flex items-center gap-2 uppercase tracking-tight">
-                      <ShoppingBag size={20} />
-                      Valider ma commande
-                    </div>
+               <button type="submit" disabled={isSubmitting} className="w-full bg-orange-600 hover:bg-orange-700 text-white py-4 rounded-2xl font-black text-lg flex flex-col items-center justify-center gap-1 shadow-xl shadow-orange-100 transition-all active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed group">
+                {isSubmitting ? <div className="flex items-center gap-3"><Loader2 className="animate-spin" size={24} /><span>Traitement...</span></div> : <>
+                    <div className="flex items-center gap-2 uppercase tracking-tight"><ShoppingBag size={20} />Valider ma commande</div>
                     <span className="text-[10px] font-medium opacity-80 uppercase tracking-widest">Total : {selectedOffer.price} DH</span>
-                  </>
-                )}
+                  </>}
               </button>
             </div>
 
-            <button 
-              type="button"
-              onClick={sendWhatsApp}
-              className="w-full bg-green-50 text-green-700 py-3 rounded-xl font-bold text-xs flex items-center justify-center gap-2 border-2 border-green-100 hover:bg-green-100 transition-all"
-            >
-              <MessageSquare size={14} />
-              Commander rapidement via WhatsApp
+            <button type="button" onClick={sendWhatsApp} className="w-full bg-green-50 text-green-700 py-3 rounded-xl font-bold text-xs flex items-center justify-center gap-2 border-2 border-green-100 hover:bg-green-100 transition-all">
+              <MessageSquare size={14} />Commander rapidement via WhatsApp
             </button>
           </form>
         </div>

@@ -35,14 +35,11 @@ const SizeGuide: React.FC = () => {
               <tbody className="divide-y divide-gray-50">
                 {sizes.map((size) => (
                   <tr key={size.label} className="group hover:bg-orange-50/50 transition-colors">
-                    {/* COL 1: LABEL */}
                     <td className="py-3 px-3 md:py-6 md:px-8">
                       <span className="inline-flex items-center justify-center w-8 h-8 md:w-12 md:h-12 rounded-lg md:rounded-xl bg-gray-900 text-white font-black text-xs md:text-lg group-hover:bg-orange-600 transition-colors">
                         {size.label}
                       </span>
                     </td>
-                    
-                    {/* COL 2: DIMENSIONS (Stacked on mobile) */}
                     <td className="py-3 px-2 md:py-6 md:px-6">
                       <div className="flex flex-col md:flex-row md:gap-6 items-center md:items-start text-center md:text-left">
                         <div className="flex flex-col">
@@ -56,8 +53,6 @@ const SizeGuide: React.FC = () => {
                         </div>
                       </div>
                     </td>
-
-                    {/* COL 3: MORPHOLOGY */}
                     <td className="py-3 px-3 md:py-6 md:px-8 text-right md:text-left">
                       <div className="flex flex-col">
                         <span className="text-xs md:text-sm font-black text-gray-800">{size.weight}</span>

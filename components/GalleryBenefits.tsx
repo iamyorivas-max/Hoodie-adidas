@@ -6,22 +6,22 @@ const GalleryBenefits: React.FC = () => {
     {
       title: "Confort Absolu",
       description: "Tissu ultra-doux en coton brossé pour une sensation de bien-être toute la journée.",
-      img: "https://picsum.photos/seed/hoodie_benefit1/600/400"
+      img: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=800&auto=format&fit=crop"
     },
     {
       title: "Qualité Supérieure",
       description: "Coutures renforcées et tissu anti-boulochage conçu pour durer des années.",
-      img: "https://picsum.photos/seed/hoodie_benefit2/600/400"
+      img: "https://images.unsplash.com/photo-1519985176271-adb1088fa94c?q=80&w=800&auto=format&fit=crop"
     },
     {
       title: "Style Intemporel",
       description: "Un design épuré qui se marie parfaitement avec n'importe quelle tenue.",
-      img: "https://picsum.photos/seed/hoodie_benefit3/600/400"
+      img: "https://images.unsplash.com/photo-1578587018452-892bacefd3f2?q=80&w=800&auto=format&fit=crop"
     },
     {
       title: "Durabilité Maximale",
       description: "Résiste aux lavages fréquents sans perdre sa forme ni sa couleur d'origine.",
-      img: "https://picsum.photos/seed/hoodie_benefit4/600/400"
+      img: "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=800&auto=format&fit=crop"
     }
   ];
 
@@ -33,14 +33,14 @@ const GalleryBenefits: React.FC = () => {
           <p className="text-gray-600 max-w-2xl mx-auto">Plus qu'un simple vêtement, c'est une expérience de confort que vous ne voudrez plus quitter.</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
           {benefits.map((benefit, idx) => (
-            <div key={idx} className="group overflow-hidden rounded-3xl bg-gray-50 hover:bg-white border border-gray-100 transition-all hover:shadow-2xl">
-              <div className="aspect-video overflow-hidden">
+            <div key={idx} className="group overflow-hidden rounded-[32px] bg-gray-50 hover:bg-white border border-gray-100 transition-all hover:shadow-2xl hover:-translate-y-1">
+              <div className="aspect-[3/4] overflow-hidden">
                 <img 
                   src={benefit.img} 
                   alt={benefit.title} 
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
               </div>
               <div className="p-6">
