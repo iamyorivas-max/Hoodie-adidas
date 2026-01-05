@@ -8,7 +8,6 @@ const SizeGuide: React.FC = () => {
     { label: 'M', width: '54', length: '70', weight: '65-75kg', height: '1m75' },
     { label: 'L', width: '56', length: '72', weight: '75-85kg', height: '1m80' },
     { label: 'XL', width: '58', length: '74', weight: '85-95kg', height: '1m85' },
-    { label: 'XXL', width: '60', length: '76', weight: ' > 95kg', height: '1m90+' },
   ];
 
   return (

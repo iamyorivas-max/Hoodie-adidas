@@ -34,7 +34,7 @@ const OrderForm: React.FC<OrderFormProps> = ({ onOrderSuccess }) => {
     address: '',
     city: '',
     offer: '1x',
-    variants: [{ size: 'M', color: 'Noir' }] as ItemVariant[]
+    variants: [{ size: 'M', color: 'Blanc' }] as ItemVariant[]
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -45,7 +45,7 @@ const OrderForm: React.FC<OrderFormProps> = ({ onOrderSuccess }) => {
   const handleOfferChange = (offerId: string) => {
     const offer = offers.find(o => o.id === offerId) || offers[0];
     const newVariants = Array(offer.qty).fill(null).map((_, i) => (
-      formData.variants[i] || { size: 'M', color: 'Noir' }
+      formData.variants[i] || { size: 'M', color: 'Blanc' }
     ));
     setFormData({ ...formData, offer: offerId, variants: newVariants });
   };
@@ -184,10 +184,10 @@ const OrderForm: React.FC<OrderFormProps> = ({ onOrderSuccess }) => {
                     <div className="w-7 h-7 rounded-full bg-orange-100 text-orange-600 text-[10px] font-black flex items-center justify-center shrink-0">#{index + 1}</div>
                     <div className="flex-grow grid grid-cols-2 gap-3">
                       <select required className="w-full px-3 py-2.5 rounded-xl border-2 border-white bg-white font-black text-xs outline-none shadow-sm focus:border-orange-500" value={variant.size} onChange={e => updateVariant(index, 'size', e.target.value)}>
-                        {['S','M','L','XL','XXL'].map(s => <option key={s} value={s}>Taille {s}</option>)}
+                        {['S','M','L','XL'].map(s => <option key={s} value={s}>Taille {s}</option>)}
                       </select>
                       <select required className="w-full px-3 py-2.5 rounded-xl border-2 border-white bg-white font-black text-xs outline-none shadow-sm focus:border-orange-500" value={variant.color} onChange={e => updateVariant(index, 'color', e.target.value)}>
-                        {['Noir','Gris','Bleu','Vert'].map(c => <option key={c} value={c}>{c}</option>)}
+                        {['Blanc','Marron'].map(c => <option key={c} value={c}>{c}</option>)}
                       </select>
                     </div>
                   </div>
