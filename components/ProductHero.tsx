@@ -20,7 +20,7 @@ const ProductHero: React.FC = () => {
         <div className="rounded-3xl overflow-hidden shadow-2xl bg-gray-100 aspect-[4/5] relative group">
           <img 
             src={mainImage} 
-            alt="adidas fleece hoodie unisexe" 
+            alt="Adidas fleece hoodie unisexe" 
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
           <div className="absolute top-4 right-4 bg-orange-600 text-white px-3 py-1.5 rounded-full text-xs font-black shadow-xl animate-bounce">
