@@ -6,22 +6,22 @@ const GalleryBenefits: React.FC = () => {
     {
       title: "Confort Absolu",
       description: "Tissu ultra-doux en coton brossé pour une sensation de bien-être toute la journée.",
-      img: "https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=800&auto=format&fit=crop"
+      img: "https://i.ibb.co/8D90GhgW/Whats-App-Image-2026-01-05-at-14-34-33-1.jpg"
     },
     {
       title: "Qualité Supérieure",
       description: "Coutures renforcées et tissu anti-boulochage conçu pour durer des années.",
-      img: "https://images.unsplash.com/photo-1519985176271-adb1088fa94c?q=80&w=800&auto=format&fit=crop"
+      img: "https://i.ibb.co/WpxNyShR/Whats-App-Image-2026-01-05-at-14-40-13.jpg"
     },
     {
       title: "Style Intemporel",
       description: "Un design épuré qui se marie parfaitement avec n'importe quelle tenue.",
-      img: "https://images.unsplash.com/photo-1578587018452-892bacefd3f2?q=80&w=800&auto=format&fit=crop"
+      img: "https://i.ibb.co/7NKVQbk6/Whats-App-Image-2026-01-05-at-14-34-33.jpg"
     },
     {
       title: "Durabilité Maximale",
       description: "Résiste aux lavages fréquents sans perdre sa forme ni sa couleur d'origine.",
-      img: "https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?q=80&w=800&auto=format&fit=crop"
+      img: "https://i.ibb.co/7NKVQbk6/Whats-App-Image-2026-01-05-at-14-34-33.jpg"
     }
   ];
 
