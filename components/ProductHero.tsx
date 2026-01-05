@@ -4,11 +4,11 @@ import { Star, ShoppingBag, CheckCircle2 } from 'lucide-react';
 
 const ProductHero: React.FC = () => {
   const images = [
-    'https://i.ibb.co/WpxNyShR/Whats-App-Image-2026-01-05-at-14-40-13.jpg',
-    'https://i.ibb.co/7NKVQbk6/Whats-App-Image-2026-01-05-at-14-34-33.jpg',
-    'https://i.ibb.co/8D90GhgW/Whats-App-Image-2026-01-05-at-14-34-33-1.jpg',
-    'https://i.ibb.co/nN3ZQ41x/Whats-App-Image-2026-01-05-at-14-36-25.jpg',
-    'https://i.ibb.co/Z6d20VtP/Whats-App-Image-2026-01-05-at-14-42-18.jpg',
+    'https://i.ibb.co/yc2BVzTZ/Whats-App-Image-2026-01-05-at-16-01-46.jpg',
+    'https://i.ibb.co/JFsFmFvF/Whats-App-Image-2026-01-05-at-16-01-38.jpg',
+    'https://i.ibb.co/NvvsYzY/Whats-App-Image-2026-01-05-at-16-01-30.jpg',
+    'https://i.ibb.co/xt345WGj/Whats-App-Image-2026-01-05-at-16-01-22.jpg',
+    'https://i.ibb.co/jdfnBtR/Whats-App-Image-2026-01-05-at-16-01-15.jpg',
   ];
 
   const [mainImage, setMainImage] = useState(images[0]);
