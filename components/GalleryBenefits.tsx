@@ -21,7 +21,7 @@ const GalleryBenefits: React.FC = () => {
     {
       title: "Durabilité Maximale",
       description: "Résiste aux lavages fréquents sans perdre sa forme ni sa couleur d'origine.",
-      img: "https://i.ibb.co/7NKVQbk6/Whats-App-Image-2026-01-05-at-14-34-33.jpg"
+      img: "https://i.ibb.co/nN3ZQ41x/Whats-App-Image-2026-01-05-at-14-36-25.jpg"
     }
   ];
 

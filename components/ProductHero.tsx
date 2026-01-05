@@ -20,7 +20,7 @@ const ProductHero: React.FC = () => {
         <div className="rounded-3xl overflow-hidden shadow-2xl bg-gray-100 aspect-[4/5] relative group">
           <img 
             src={mainImage} 
-            alt="Hoodie Elite Main" 
+            alt="adidas fleece hoodie unisexe" 
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           />
           <div className="absolute top-4 right-4 bg-orange-600 text-white px-3 py-1.5 rounded-full text-xs font-black shadow-xl animate-bounce">
@@ -53,12 +53,12 @@ const ProductHero: React.FC = () => {
             <span className="text-[10px] font-bold text-gray-400 ml-2 tracking-widest uppercase">1,248 avis vérifiés</span>
           </div>
           <h1 className="text-3xl md:text-5xl font-black text-gray-900 leading-tight tracking-tight">
-            Hoodie Elite™ Unisexe <br/> <span className="text-orange-600">Confort Absolu.</span>
+            adidas fleece hoodie <br/> <span className="text-orange-600">unisexe</span>
           </h1>
         </div>
 
         <p className="text-lg text-gray-600 leading-relaxed font-medium">
-          Le hoodie qui redéfinit vos standards. Coton premium <span className="text-gray-900 font-bold">400 GSM</span> pour une douceur inégalée.
+          Le hoodie iconique qui redéfinit vos standards. Coton premium brossé pour une douceur et une chaleur inégalées.
         </p>
 
         <div className="space-y-3">
@@ -76,14 +76,14 @@ const ProductHero: React.FC = () => {
           ))}
         </div>
 
-        {/* PRICE CARD - COMPACT VERSION */}
+        {/* PRICE CARD */}
         <div className="bg-gray-50 p-5 md:p-7 rounded-[32px] border border-gray-100 shadow-inner text-center max-w-md mx-auto lg:mx-0 w-full">
           <div className="flex flex-col items-center justify-center gap-1 mb-5">
              <div className="flex items-center gap-3">
-                <span className="text-4xl md:text-5xl font-black text-gray-900 tracking-tighter">299 DH</span>
-                <span className="text-xl md:text-2xl text-red-600 line-through font-bold opacity-70 decoration-[2px]">599 DH</span>
+                <span className="text-4xl md:text-5xl font-black text-gray-900 tracking-tighter">349 DH</span>
+                <span className="text-xl md:text-2xl text-red-600 line-through font-bold opacity-70 decoration-[2px]">699 DH</span>
              </div>
-             <p className="text-green-600 font-black text-[10px] uppercase tracking-[0.15em] mt-1">Économisez 300 DH aujourd'hui</p>
+             <p className="text-green-600 font-black text-[10px] uppercase tracking-[0.15em] mt-1">Économisez 350 DH aujourd'hui</p>
           </div>
           
           <a 
