@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { User, Phone, MapPin, CheckCircle2, ShoppingBag, AlertCircle, MessageSquare, Loader2, Sparkles } from 'lucide-react';
+import { User, Phone, MapPin, ShoppingBag, AlertCircle, MessageSquare, Loader2, Sparkles } from 'lucide-react';
 
 const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbyvTK-hHnk8YcGpeUoOsvY1d260av1W4eLPPCSX8epEs950VpTZjh_rfLed-DDAoEu8pg/exec';
 
@@ -9,7 +9,19 @@ interface ItemVariant {
   color: string;
 }
 
-const OrderForm: React.FC = () => {
+interface OrderFormProps {
+  onOrderSuccess: (details: {
+    fullname: string;
+    phone: string;
+    city: string;
+    address: string;
+    offer: string;
+    price: string;
+    items: string;
+  }) => void;
+}
+
+const OrderForm: React.FC<OrderFormProps> = ({ onOrderSuccess }) => {
   const offers = [
     { id: '1x', name: '1 Hoodie Elite', price: 299, original: 599, badge: null, qty: 1 },
     { id: '2x', name: 'Pack Duo (2 Hoodies)', price: 499, original: 1198, badge: 'OFFRE POPULAIRE', save: 699, qty: 2 },
@@ -26,7 +38,6 @@ const OrderForm: React.FC = () => {
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const selectedOffer = offers.find(o => o.id === formData.offer) || offers[0];
@@ -46,7 +57,7 @@ const OrderForm: React.FC = () => {
   };
 
   const formatVariantsString = () => {
-    return formData.variants.map((v, i) => `Art#${i+1}: ${v.size}/${v.color}`).join(' | ');
+    return formData.variants.map((v, i) => `Article ${i+1}: ${v.size} / ${v.color}`).join(' | ');
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -65,6 +76,7 @@ const OrderForm: React.FC = () => {
 
     try {
       const params = new URLSearchParams();
+      const variantDetails = formatVariantsString();
       
       const dataToSend = {
         fullname: formData.fullname.trim(),
@@ -72,12 +84,10 @@ const OrderForm: React.FC = () => {
         address: formData.address.trim(),
         city: formData.city.trim(),
         offer: selectedOffer.name,
-        details: formatVariantsString(),
+        details: variantDetails,
         size: formData.variants.map(v => v.size).join(', '),
         color: formData.variants.map(v => v.color).join(', '),
         totalPrice: `${selectedOffer.price} DH`,
-        total_price: `${selectedOffer.price} DH`,
-        montant_total: `${selectedOffer.price} DH`,
         date: new Date().toLocaleString()
       };
 
@@ -85,6 +95,7 @@ const OrderForm: React.FC = () => {
         params.append(key, String(value));
       });
 
+      // Submit to Google Sheets (no-cors)
       try {
         await fetch(GOOGLE_SHEET_URL, {
           method: 'POST',
@@ -93,14 +104,19 @@ const OrderForm: React.FC = () => {
           body: params.toString()
         });
       } catch (fErr) {
-        console.warn("Fetch background info:", fErr);
+        console.warn("Sheet submission silent log:", fErr);
       }
 
-      setTimeout(() => {
-        setIsSuccess(true);
-        setIsSubmitting(false);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }, 800);
+      // Transition to Thank You Page
+      onOrderSuccess({
+        fullname: formData.fullname.trim(),
+        phone: formData.phone.trim(),
+        city: formData.city.trim(),
+        address: formData.address.trim(),
+        offer: selectedOffer.name,
+        price: `${selectedOffer.price} DH`,
+        items: variantDetails
+      });
 
     } catch (err) {
       console.error("Critical error:", err);
@@ -113,25 +129,6 @@ const OrderForm: React.FC = () => {
     const text = `Bonjour, je souhaite commander:\n- Offre: ${selectedOffer.name}\n- Articles: ${formatVariantsString()}\n- Prix total: ${selectedOffer.price} DH\n\nMes infos:\n- Nom: ${formData.fullname}\n- Tél: ${formData.phone}\n- Ville: ${formData.city}`;
     window.open(`https://wa.me/212600000000?text=${encodeURIComponent(text)}`, '_blank');
   };
-
-  if (isSuccess) {
-    return (
-      <section id="order-form" className="py-20 px-4 bg-white scroll-mt-20">
-        <div className="max-w-xl mx-auto text-center p-10 rounded-[40px] border-4 border-green-100 bg-green-50 shadow-2xl animate-in zoom-in duration-500">
-          <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg shadow-green-200">
-            <CheckCircle2 size={40} className="text-white" />
-          </div>
-          <h2 className="text-2xl font-black text-gray-900 mb-2">Commande Enregistrée !</h2>
-          <p className="text-gray-600 mb-8 font-medium">
-            Merci <span className="text-gray-900 font-bold">{formData.fullname}</span>. <br/>
-            Nous vous appellerons pour confirmer l'envoi de votre pack <span className="text-orange-600 font-bold">{selectedOffer.name}</span>.<br/>
-            Montant à payer : <span className="font-bold">{selectedOffer.price} DH</span>.
-          </p>
-          <button onClick={() => setIsSuccess(false)} className="bg-gray-900 text-white px-8 py-3 rounded-xl font-bold hover:bg-gray-800 transition-all">Faire une autre commande</button>
-        </div>
-      </section>
-    );
-  }
 
   return (
     <section id="order-form" className="py-16 px-4 md:px-8 bg-gray-100 scroll-mt-20">
