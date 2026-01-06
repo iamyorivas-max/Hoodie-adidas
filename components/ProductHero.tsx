@@ -53,7 +53,7 @@ const ProductHero: React.FC = () => {
             <span className="text-[10px] font-bold text-gray-400 ml-2 tracking-widest uppercase">1,248 avis vérifiés</span>
           </div>
           <h1 className="text-3xl md:text-5xl font-black text-gray-900 leading-tight tracking-tight">
-            adidas fleece hoodie <br/> <span className="text-orange-600">unisexe</span>
+            Adidas fleece hoodie <br/> <span className="text-orange-600">unisexe</span>
           </h1>
         </div>
 
