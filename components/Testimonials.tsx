@@ -22,7 +22,7 @@ const testimonials: Testimonial[] = [
     id: 2,
     name: "Sara Mansouri",
     city: "Rabat",
-    text: "Franchement rien à dire, la coupe est parfaite. La couleur ne bouge pas du tout après plusieurs lavages. Je vais en commander un deuxième en gris !",
+    text: "Franchement rien à dire, la coupe est parfaite. La couleur ne bouge pas du tout après plusieurs lavages. Je vais en commander un deuxième en marron !",
     avatar: "https://i.pravatar.cc/150?u=sara"
   },
   {
