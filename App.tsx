@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AnnouncementBar from './components/AnnouncementBar.tsx';
 import ProductHero from './components/ProductHero.tsx';
 import CountdownSection from './components/CountdownSection.tsx';
@@ -25,13 +25,36 @@ export interface OrderDetails {
 const App: React.FC = () => {
   const [submittedOrder, setSubmittedOrder] = useState<OrderDetails | null>(null);
 
+  // Synchronise l'état de l'application avec l'URL pour le tracking et le bouton retour
+  useEffect(() => {
+    const handlePopState = () => {
+      const params = new URLSearchParams(window.location.search);
+      if (!params.has('status')) {
+        setSubmittedOrder(null);
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
   const handleOrderSuccess = (details: OrderDetails) => {
     setSubmittedOrder(details);
+    
+    // Changement d'URL pour le tracking (ex: ?status=merci)
+    const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?status=merci';
+    window.history.pushState({ path: newUrl }, '', newUrl);
+    
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const resetView = () => {
     setSubmittedOrder(null);
+    
+    // Retour à l'URL d'origine
+    const cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+    window.history.pushState({ path: cleanUrl }, '', cleanUrl);
+    
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
