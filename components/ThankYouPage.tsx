@@ -9,6 +9,9 @@ interface ThankYouPageProps {
 }
 
 const ThankYouPage: React.FC<ThankYouPageProps> = ({ order, onBack }) => {
+  // Photo principale du produit (celle du Hero)
+  const productThumbnail = "https://i.ibb.co/yc2BVzTZ/Whats-App-Image-2026-01-05-at-16-01-46.jpg";
+
   return (
     <div className="bg-gray-50 min-h-screen pb-20 animate-in fade-in duration-700">
       {/* Hero Header */}
@@ -31,55 +34,58 @@ const ThankYouPage: React.FC<ThankYouPageProps> = ({ order, onBack }) => {
         {/* Left Column: Order Summary */}
         <div className="lg:col-span-7 space-y-6">
           <div className="bg-white rounded-[32px] shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden">
-            <div className="bg-gray-900 px-8 py-5 flex items-center justify-between text-white">
+            <div className="bg-[#111827] px-8 py-5 flex items-center justify-between text-white">
               <div className="flex items-center gap-3">
                 <Package size={20} className="text-orange-500" />
-                <span className="font-black uppercase tracking-widest text-xs">Récapitulatif de la commande</span>
+                <span className="font-black uppercase tracking-widest text-[10px] md:text-xs">Récapitulatif de la commande</span>
               </div>
               <span className="text-[10px] font-bold opacity-60">#{Math.floor(Math.random() * 90000) + 10000}</span>
             </div>
             
-            <div className="p-8">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-8 border-b border-gray-50">
-                <div className="flex items-center gap-5">
-                  <div className="w-20 h-24 bg-gray-100 rounded-2xl overflow-hidden shrink-0 border border-gray-50">
-                    <img src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?q=80&w=400&auto=format&fit=crop" alt="Hoodie Elite" className="w-full h-full object-cover" />
+            <div className="p-6 md:p-10">
+              <div className="flex flex-row items-center justify-between gap-4 md:gap-6 pb-8 border-b border-gray-50">
+                <div className="flex items-center gap-4 md:gap-6">
+                  {/* Image réelle du produit */}
+                  <div className="w-20 h-24 md:w-28 md:h-32 bg-gray-50 rounded-2xl overflow-hidden shrink-0 border border-gray-100 shadow-sm">
+                    <img src={productThumbnail} alt="Adidas fleece hoodie" className="w-full h-full object-cover" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-black text-gray-900">{order.offer}</h3>
-                    <p className="text-sm text-gray-500 font-medium mt-1 leading-relaxed">{order.items}</p>
+                    <h3 className="text-lg md:text-2xl font-black text-gray-900 leading-tight">{order.offer}</h3>
+                    <p className="text-xs md:text-sm text-gray-400 font-bold mt-1.5 uppercase tracking-wide">
+                      {order.items}
+                    </p>
                   </div>
                 </div>
-                <div className="text-2xl font-black text-gray-900">{order.price}</div>
+                <div className="text-xl md:text-3xl font-black text-gray-900 whitespace-nowrap">{order.price}</div>
               </div>
 
-              <div className="py-8 grid grid-cols-1 md:grid-cols-2 gap-8 border-b border-gray-50">
+              <div className="py-8 grid grid-cols-1 md:grid-cols-2 gap-8 border-b border-gray-100">
                 <div>
-                  <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">Informations de livraison</h4>
-                  <div className="space-y-1">
-                    <p className="font-bold text-gray-900">{order.fullname}</p>
-                    <p className="text-sm text-gray-600">{order.phone}</p>
-                    <p className="text-sm text-gray-600">{order.address}, {order.city}</p>
+                  <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">Informations de livraison</h4>
+                  <div className="space-y-1.5">
+                    <p className="font-black text-gray-900 text-base">{order.fullname}</p>
+                    <p className="text-sm text-gray-600 font-medium">{order.phone}</p>
+                    <p className="text-sm text-gray-500 leading-relaxed">{order.address}, {order.city}</p>
                   </div>
                 </div>
                 <div>
-                  <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">Mode de paiement</h4>
-                  <div className="flex items-center gap-2 text-green-600 font-bold">
-                    <div className="w-2 h-2 rounded-full bg-green-500" />
+                  <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">Mode de paiement</h4>
+                  <div className="flex items-center gap-2 text-green-600 font-black text-sm">
+                    <div className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse" />
                     Paiement à la réception (Cash)
                   </div>
                 </div>
               </div>
 
               <div className="pt-8 flex items-center justify-between">
-                <span className="text-gray-500 font-bold">Total à payer au livreur</span>
-                <span className="text-3xl font-black text-orange-600">{order.price}</span>
+                <span className="text-gray-400 font-black uppercase tracking-widest text-[10px]">Total à payer au livreur</span>
+                <span className="text-3xl md:text-4xl font-black text-orange-600 tracking-tighter">{order.price}</span>
               </div>
             </div>
           </div>
 
           {/* Satisfaction Badge */}
-          <div className="bg-orange-600 rounded-[32px] p-8 text-white flex flex-col md:flex-row items-center gap-6 shadow-xl shadow-orange-100">
+          <div className="bg-orange-600 rounded-[32px] p-8 text-white flex flex-col md:flex-row items-center gap-6 shadow-xl shadow-orange-100/50">
             <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center shrink-0">
               <ShieldCheck size={32} />
             </div>
@@ -95,44 +101,44 @@ const ThankYouPage: React.FC<ThankYouPageProps> = ({ order, onBack }) => {
         {/* Right Column: Next Steps */}
         <div className="lg:col-span-5 space-y-6">
           <div className="bg-white rounded-[32px] p-8 shadow-xl shadow-gray-200/50 border border-gray-100">
-            <h3 className="text-xl font-black text-gray-900 mb-8 flex items-center gap-3">
+            <h3 className="text-xl font-black text-gray-900 mb-10 flex items-center gap-3">
               <Sparkles className="text-orange-500" size={20} />
               Prochaines étapes
             </h3>
             
-            <div className="space-y-10 relative before:absolute before:left-6 before:top-2 before:bottom-2 before:w-0.5 before:bg-gray-100">
-              <div className="relative flex gap-6">
-                <div className="w-12 h-12 bg-orange-100 rounded-2xl flex items-center justify-center text-orange-600 shrink-0 z-10 border-4 border-white">
-                  <PhoneCall size={20} />
+            <div className="space-y-12 relative before:absolute before:left-6 before:top-2 before:bottom-2 before:w-0.5 before:bg-gray-100">
+              <div className="relative flex gap-8">
+                <div className="w-12 h-12 bg-orange-100 rounded-2xl flex items-center justify-center text-orange-600 shrink-0 z-10 border-4 border-white shadow-sm">
+                  <PhoneCall size={22} />
                 </div>
                 <div>
-                  <h4 className="font-black text-gray-900 mb-1">Confirmation par téléphone</h4>
-                  <p className="text-sm text-gray-500 leading-relaxed">
-                    Un conseiller va vous appeler sur le <span className="font-bold text-gray-900">{order.phone}</span> pour valider votre adresse.
+                  <h4 className="font-black text-gray-900 mb-1.5 text-lg">Confirmation par téléphone</h4>
+                  <p className="text-sm text-gray-500 leading-relaxed font-medium">
+                    Un conseiller va vous appeler sur le <span className="font-black text-gray-900">{order.phone}</span> pour valider votre commande.
                   </p>
                 </div>
               </div>
 
-              <div className="relative flex gap-6">
-                <div className="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center text-blue-600 shrink-0 z-10 border-4 border-white">
-                  <Package size={20} />
+              <div className="relative flex gap-8">
+                <div className="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center text-blue-600 shrink-0 z-10 border-4 border-white shadow-sm">
+                  <Package size={22} />
                 </div>
                 <div>
-                  <h4 className="font-black text-gray-900 mb-1">Expédition express</h4>
-                  <p className="text-sm text-gray-500 leading-relaxed">
-                    Une fois confirmé, votre pack sera expédié immédiatement depuis notre entrepôt.
+                  <h4 className="font-black text-gray-900 mb-1.5 text-lg">Expédition express</h4>
+                  <p className="text-sm text-gray-500 leading-relaxed font-medium">
+                    Une fois confirmé, votre colis est préparé et expédié immédiatement depuis notre stock.
                   </p>
                 </div>
               </div>
 
-              <div className="relative flex gap-6">
-                <div className="w-12 h-12 bg-green-100 rounded-2xl flex items-center justify-center text-green-600 shrink-0 z-10 border-4 border-white">
-                  <Truck size={20} />
+              <div className="relative flex gap-8">
+                <div className="w-12 h-12 bg-green-100 rounded-2xl flex items-center justify-center text-green-600 shrink-0 z-10 border-4 border-white shadow-sm">
+                  <Truck size={22} />
                 </div>
                 <div>
-                  <h4 className="font-black text-gray-900 mb-1">Livraison 48h</h4>
-                  <p className="text-sm text-gray-500 leading-relaxed">
-                    Le livreur vous contactera pour vous remettre le colis à <span className="font-bold text-gray-900">{order.city}</span>.
+                  <h4 className="font-black text-gray-900 mb-1.5 text-lg">Livraison 48h</h4>
+                  <p className="text-sm text-gray-500 leading-relaxed font-medium">
+                    Le livreur vous contactera pour vous remettre le colis en main propre à <span className="font-black text-gray-900">{order.city}</span>.
                   </p>
                 </div>
               </div>
@@ -143,7 +149,7 @@ const ThankYouPage: React.FC<ThankYouPageProps> = ({ order, onBack }) => {
           <div className="grid grid-cols-1 gap-4">
             <button 
               onClick={onBack}
-              className="w-full bg-gray-900 text-white py-4 rounded-2xl font-black text-lg flex items-center justify-center gap-3 hover:bg-black transition-all active:scale-95 shadow-xl shadow-gray-200"
+              className="w-full bg-gray-900 text-white py-5 rounded-2xl font-black text-lg flex items-center justify-center gap-3 hover:bg-black transition-all active:scale-95 shadow-xl shadow-gray-200"
             >
               <ChevronLeft size={20} />
               Retour à l'accueil
@@ -151,8 +157,9 @@ const ThankYouPage: React.FC<ThankYouPageProps> = ({ order, onBack }) => {
             <a 
               href={`https://wa.me/212600000000?text=${encodeURIComponent("Bonjour, j'ai une question concernant ma commande au nom de " + order.fullname)}`}
               target="_blank"
-              className="w-full bg-white text-gray-600 py-4 rounded-2xl font-bold text-sm flex items-center justify-center gap-3 border-2 border-gray-100 hover:bg-gray-50 transition-all"
+              className="w-full bg-white text-gray-600 py-4 rounded-2xl font-bold text-sm flex items-center justify-center gap-3 border-2 border-gray-100 hover:bg-gray-50 transition-all shadow-sm"
             >
+              <ShoppingBag size={18} className="text-orange-500" />
               Besoin d'aide ? Contactez-nous
             </a>
           </div>
