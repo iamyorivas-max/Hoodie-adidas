@@ -155,7 +155,7 @@ const ThankYouPage: React.FC<ThankYouPageProps> = ({ order, onBack }) => {
               Retour à l'accueil
             </button>
             <a 
-              href={`https://wa.me/212600000000?text=${encodeURIComponent("Bonjour, j'ai une question concernant ma commande au nom de " + order.fullname)}`}
+              href={`https://wa.me/212676809781?text=${encodeURIComponent("Bonjour, j'ai une question concernant ma commande au nom de " + order.fullname)}`}
               target="_blank"
               className="w-full bg-white text-gray-600 py-4 rounded-2xl font-bold text-sm flex items-center justify-center gap-3 border-2 border-gray-100 hover:bg-gray-50 transition-all shadow-sm"
             >

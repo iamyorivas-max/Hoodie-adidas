@@ -11,6 +11,7 @@ import Testimonials from './components/Testimonials.tsx';
 import FAQ from './components/FAQ.tsx';
 import Footer from './components/Footer.tsx';
 import ThankYouPage from './components/ThankYouPage.tsx';
+import { MessageCircle } from 'lucide-react';
 
 export interface OrderDetails {
   fullname: string;
@@ -58,6 +59,19 @@ const App: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const WhatsAppFloating = () => (
+    <a 
+      href="https://wa.me/212676809781" 
+      target="_blank" 
+      rel="noopener noreferrer"
+      className="fixed bottom-6 right-6 z-[60] bg-[#25D366] text-white p-4 rounded-full shadow-2xl hover:scale-110 transition-transform active:scale-90 group"
+      aria-label="Contactez-nous sur WhatsApp"
+    >
+      <div className="absolute inset-0 bg-[#25D366] rounded-full animate-ping opacity-25 group-hover:hidden"></div>
+      <MessageCircle size={32} className="relative z-10" />
+    </a>
+  );
+
   if (submittedOrder) {
     return (
       <div className="min-h-screen flex flex-col scroll-smooth">
@@ -66,6 +80,7 @@ const App: React.FC = () => {
           <ThankYouPage order={submittedOrder} onBack={resetView} />
         </main>
         <Footer />
+        <WhatsAppFloating />
       </div>
     );
   }
@@ -86,6 +101,7 @@ const App: React.FC = () => {
       </main>
 
       <Footer />
+      <WhatsAppFloating />
     </div>
   );
 };

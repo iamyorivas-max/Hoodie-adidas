@@ -124,7 +124,7 @@ const OrderForm: React.FC<OrderFormProps> = ({ onOrderSuccess }) => {
 
   const sendWhatsApp = () => {
     const text = `Bonjour, je souhaite commander:\n- Offre: ${selectedOffer.name}\n- Articles: ${formatVariantsString()}\n- Prix total: ${selectedOffer.price} DH\n\nMes infos:\n- Nom: ${formData.fullname}\n- Tél: ${formData.phone}\n- Ville: ${formData.city}`;
-    window.open(`https://wa.me/212600000000?text=${encodeURIComponent(text)}`, '_blank');
+    window.open(`https://wa.me/212676809781?text=${encodeURIComponent(text)}`, '_blank');
   };
 
   return (
@@ -183,7 +183,6 @@ const OrderForm: React.FC<OrderFormProps> = ({ onOrderSuccess }) => {
                     <div className="flex items-center gap-2">
                        <span className="bg-gray-900 text-white text-[9px] font-black px-2.5 py-1 rounded-full uppercase tracking-widest">Article {index + 1}</span>
                     </div>
-                    {/* Updated grid for single line on mobile */}
                     <div className="grid grid-cols-2 gap-2 md:gap-4">
                       <div className="relative">
                         <select 
