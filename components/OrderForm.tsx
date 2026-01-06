@@ -144,7 +144,7 @@ const OrderForm: React.FC<OrderFormProps> = ({ onOrderSuccess }) => {
               </div>
             )}
 
-            {/* STEP 1: OFFERS (TRIO REMOVED) */}
+            {/* STEP 1: OFFERS */}
             <div className="space-y-4">
               <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest block ml-2">1. Choisissez votre pack</label>
               <div className="grid grid-cols-1 gap-3">
@@ -174,39 +174,38 @@ const OrderForm: React.FC<OrderFormProps> = ({ onOrderSuccess }) => {
               </div>
             </div>
 
-            {/* STEP 2: VARIANTS (ORANGE CASE, WHITE TEXT) */}
+            {/* STEP 2: VARIANTS (SIDE BY SIDE ON MOBILE) */}
             <div className="space-y-4">
-              <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest block ml-2">2. Tailles et Couleurs (Haute Visibilité)</label>
+              <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest block ml-2">2. Tailles et Couleurs</label>
               <div className="grid grid-cols-1 gap-4">
                 {formData.variants.map((variant, index) => (
-                  <div key={index} className="p-5 rounded-3xl bg-gray-50 border border-gray-100 space-y-4">
+                  <div key={index} className="p-4 md:p-5 rounded-3xl bg-gray-50 border border-gray-100 space-y-3">
                     <div className="flex items-center gap-2">
                        <span className="bg-gray-900 text-white text-[9px] font-black px-2.5 py-1 rounded-full uppercase tracking-widest">Article {index + 1}</span>
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {/* Updated grid for single line on mobile */}
+                    <div className="grid grid-cols-2 gap-2 md:gap-4">
                       <div className="relative">
                         <select 
                           required 
-                          className="w-full bg-orange-600 text-white px-5 py-4 rounded-2xl font-black text-lg outline-none shadow-xl shadow-orange-100 hover:bg-orange-700 transition-colors cursor-pointer appearance-none border-b-4 border-orange-800"
+                          className="w-full bg-orange-600 text-white pl-3 pr-8 py-3.5 md:px-5 md:py-4 rounded-xl md:rounded-2xl font-black text-sm md:text-lg outline-none shadow-lg shadow-orange-100 hover:bg-orange-700 transition-colors cursor-pointer appearance-none border-b-4 border-orange-800"
                           value={variant.size} 
                           onChange={e => updateVariant(index, 'size', e.target.value)}
                         >
-                          <option value="" disabled className="text-gray-900 bg-white">Choisir Taille</option>
                           {['S','M','L','XL'].map(s => <option key={s} value={s} className="text-gray-900 bg-white">TAILLE {s}</option>)}
                         </select>
-                        <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-white/70 pointer-events-none" size={20} />
+                        <ChevronDown className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 text-white/70 pointer-events-none" size={16} />
                       </div>
                       <div className="relative">
                         <select 
                           required 
-                          className="w-full bg-orange-600 text-white px-5 py-4 rounded-2xl font-black text-lg outline-none shadow-xl shadow-orange-100 hover:bg-orange-700 transition-colors cursor-pointer appearance-none border-b-4 border-orange-800"
+                          className="w-full bg-orange-600 text-white pl-3 pr-8 py-3.5 md:px-5 md:py-4 rounded-xl md:rounded-2xl font-black text-sm md:text-lg outline-none shadow-lg shadow-orange-100 hover:bg-orange-700 transition-colors cursor-pointer appearance-none border-b-4 border-orange-800"
                           value={variant.color} 
                           onChange={e => updateVariant(index, 'color', e.target.value)}
                         >
-                          <option value="" disabled className="text-gray-900 bg-white">Choisir Couleur</option>
                           {['Blanc','Marron'].map(c => <option key={c} value={c} className="text-gray-900 bg-white">{c.toUpperCase()}</option>)}
                         </select>
-                        <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-white/70 pointer-events-none" size={20} />
+                        <ChevronDown className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 text-white/70 pointer-events-none" size={16} />
                       </div>
                     </div>
                   </div>
@@ -240,7 +239,7 @@ const OrderForm: React.FC<OrderFormProps> = ({ onOrderSuccess }) => {
             <div className="pt-4">
                <button type="submit" disabled={isSubmitting} className="w-full bg-gray-900 hover:bg-black text-white py-5 rounded-2xl font-black text-xl flex flex-col items-center justify-center gap-1 shadow-2xl transition-all active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed group">
                 {isSubmitting ? (
-                  <div className="flex items-center gap-3"><Loader2 className="animate-spin" size={24} /><span>Traitement en cours...</span></div>
+                  <div className="flex items-center gap-3"><Loader2 className="animate-spin" size={24} /><span>Traitement...</span></div>
                 ) : (
                   <>
                     <div className="flex items-center gap-2 uppercase tracking-tight"><ShoppingBag size={22} />Valider ma commande</div>
