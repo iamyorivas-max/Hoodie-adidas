@@ -42,6 +42,16 @@ const App: React.FC = () => {
   const handleOrderSuccess = (details: OrderDetails) => {
     setSubmittedOrder(details);
     
+    // Tracking Meta Pixel Purchase
+    if (typeof window !== 'undefined' && (window as any).fbq) {
+      (window as any).fbq('track', 'Purchase', {
+        value: parseFloat(details.price.replace(/[^0-9.]/g, '')),
+        currency: 'MAD',
+        content_name: details.items,
+        content_category: 'Apparel'
+      });
+    }
+
     // Changement d'URL pour le tracking (ex: ?status=merci)
     const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?status=merci';
     window.history.pushState({ path: newUrl }, '', newUrl);
