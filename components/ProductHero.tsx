@@ -7,7 +7,7 @@ const ProductHero: React.FC = () => {
     'https://res.cloudinary.com/diptsoc4h/image/upload/v1772293279/Generated_Image_February_28_2026_-_1_29PM_gydouc.png',
     'https://res.cloudinary.com/diptsoc4h/image/upload/v1772293370/Generated_Image_February_28_2026_-_2_52PM_hi69ze.png',
     'https://res.cloudinary.com/diptsoc4h/image/upload/v1772293378/Generated_Image_February_28_2026_-_2_50PM_yyjzfv.png',
-    'https://res.cloudinary.com/diptsoc4h/image/upload/v1772293377/Generated_Image_February_28_2026_-_2_55PM_kpefcx.png',
+    'https://res.cloudinary.com/diptsoc4h/image/upload/v1772318563/Generated_Image_February_28_2026_-_11_43PM_dctudc.png',
     'https://res.cloudinary.com/diptsoc4h/image/upload/v1772293375/Generated_Image_February_28_2026_-_2_58PM_jdjys0.png',
     'https://res.cloudinary.com/diptsoc4h/image/upload/v1772293373/Generated_Image_February_28_2026_-_3_09PM_x7v4tx.png',
   ];
