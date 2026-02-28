@@ -4,11 +4,12 @@ import { Star, ShoppingBag, CheckCircle2 } from 'lucide-react';
 
 const ProductHero: React.FC = () => {
   const images = [
-    'https://i.ibb.co/yc2BVzTZ/Whats-App-Image-2026-01-05-at-16-01-46.jpg',
-    'https://i.ibb.co/JFsFmFvF/Whats-App-Image-2026-01-05-at-16-01-38.jpg',
-    'https://i.ibb.co/NvvsYzY/Whats-App-Image-2026-01-05-at-16-01-30.jpg',
-    'https://i.ibb.co/xt345WGj/Whats-App-Image-2026-01-05-at-16-01-22.jpg',
-    'https://i.ibb.co/jdfnBtR/Whats-App-Image-2026-01-05-at-16-01-15.jpg',
+    'https://res.cloudinary.com/diptsoc4h/image/upload/v1772293279/Generated_Image_February_28_2026_-_1_29PM_gydouc.png',
+    'https://res.cloudinary.com/diptsoc4h/image/upload/v1772293370/Generated_Image_February_28_2026_-_2_52PM_hi69ze.png',
+    'https://res.cloudinary.com/diptsoc4h/image/upload/v1772293378/Generated_Image_February_28_2026_-_2_50PM_yyjzfv.png',
+    'https://res.cloudinary.com/diptsoc4h/image/upload/v1772293377/Generated_Image_February_28_2026_-_2_55PM_kpefcx.png',
+    'https://res.cloudinary.com/diptsoc4h/image/upload/v1772293375/Generated_Image_February_28_2026_-_2_58PM_jdjys0.png',
+    'https://res.cloudinary.com/diptsoc4h/image/upload/v1772293373/Generated_Image_February_28_2026_-_3_09PM_x7v4tx.png',
   ];
 
   const [mainImage, setMainImage] = useState(images[0]);

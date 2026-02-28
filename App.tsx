@@ -4,7 +4,6 @@ import AnnouncementBar from './components/AnnouncementBar.tsx';
 import ProductHero from './components/ProductHero.tsx';
 import CountdownSection from './components/CountdownSection.tsx';
 import OrderForm from './components/OrderForm.tsx';
-import SizeGuide from './components/SizeGuide.tsx';
 import GalleryBenefits from './components/GalleryBenefits.tsx';
 import WhyChooseUs from './components/WhyChooseUs.tsx';
 import Testimonials from './components/Testimonials.tsx';
@@ -103,7 +102,6 @@ const App: React.FC = () => {
         <ProductHero />
         <CountdownSection />
         <OrderForm onOrderSuccess={handleOrderSuccess} />
-        <SizeGuide />
         <GalleryBenefits />
         <WhyChooseUs />
         <Testimonials />
