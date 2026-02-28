@@ -51,6 +51,15 @@ const App: React.FC = () => {
       });
     }
 
+    // Tracking TikTok Pixel CompletePayment
+    if (typeof window !== 'undefined' && (window as any).ttq) {
+      (window as any).ttq.track('CompletePayment', {
+        content_name: details.items,
+        value: parseFloat(details.price.replace(/[^0-9.]/g, '')),
+        currency: 'MAD',
+      });
+    }
+
     // Changement d'URL pour le tracking (ex: ?status=merci)
     const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?status=merci';
     window.history.pushState({ path: newUrl }, '', newUrl);
