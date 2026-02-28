@@ -23,8 +23,8 @@ interface OrderFormProps {
 
 const OrderForm: React.FC<OrderFormProps> = ({ onOrderSuccess }) => {
   const offers = [
-    { id: '1x', name: '1 adidas fleece hoodie', price: 349, original: 699, badge: null, qty: 1 },
-    { id: '2x', name: 'Pack Duo (2 Hoodies)', price: 599, original: 1398, badge: 'OFFRE POPULAIRE', save: 99, qty: 2 },
+    { id: '1x', name: '1 adidas fleece hoodie', price: 299, original: 699, badge: null, qty: 1 },
+    { id: '2x', name: 'Pack Duo (2 Hoodies)', price: 499, original: 1398, badge: 'OFFRE POPULAIRE', save: 99, qty: 2 },
   ];
 
   const [formData, setFormData] = useState({
@@ -191,7 +191,7 @@ const OrderForm: React.FC<OrderFormProps> = ({ onOrderSuccess }) => {
                           value={variant.size} 
                           onChange={e => updateVariant(index, 'size', e.target.value)}
                         >
-                          {['S','M','L','XL'].map(s => <option key={s} value={s} className="text-gray-900 bg-white">TAILLE {s}</option>)}
+                          {['M','L','XL'].map(s => <option key={s} value={s} className="text-gray-900 bg-white">TAILLE {s}</option>)}
                         </select>
                         <ChevronDown className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 text-white/70 pointer-events-none" size={16} />
                       </div>
@@ -202,7 +202,7 @@ const OrderForm: React.FC<OrderFormProps> = ({ onOrderSuccess }) => {
                           value={variant.color} 
                           onChange={e => updateVariant(index, 'color', e.target.value)}
                         >
-                          {['Blanc','Marron'].map(c => <option key={c} value={c} className="text-gray-900 bg-white">{c.toUpperCase()}</option>)}
+                          {['Blanc'].map(c => <option key={c} value={c} className="text-gray-900 bg-white">{c.toUpperCase()}</option>)}
                         </select>
                         <ChevronDown className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 text-white/70 pointer-events-none" size={16} />
                       </div>

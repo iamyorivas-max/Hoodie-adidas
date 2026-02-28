@@ -6,22 +6,32 @@ const GalleryBenefits: React.FC = () => {
     {
       title: "Confort Absolu",
       description: "Tissu ultra-doux en coton brossé pour une sensation de bien-être toute la journée.",
-      img: "https://i.ibb.co/8D90GhgW/Whats-App-Image-2026-01-05-at-14-34-33-1.jpg"
+      img: "https://res.cloudinary.com/diptsoc4h/image/upload/v1772315771/WhatsApp_Image_2026-02-27_at_14.34.03_eybqef.jpg"
     },
     {
-      title: "Qualité Supérieure",
-      description: "Coutures renforcées et tissu anti-boulochage conçu pour durer des années.",
-      img: "https://i.ibb.co/WpxNyShR/Whats-App-Image-2026-01-05-at-14-40-13.jpg"
+      title: "Coupe Parfaite",
+      description: "Un design moderne et unisexe qui s'adapte à toutes les morphologies.",
+      img: "https://res.cloudinary.com/diptsoc4h/image/upload/v1772315771/WhatsApp_Image_2026-02-27_at_14.34.03_5_xc1qdx.jpg"
     },
     {
-      title: "Style Intemporel",
-      description: "Un design épuré qui se marie parfaitement avec n'importe quelle tenue.",
-      img: "https://i.ibb.co/7NKVQbk6/Whats-App-Image-2026-01-05-at-14-34-33.jpg"
+      title: "Détails Premium",
+      description: "Finitions soignées et logo iconique pour un look authentique et soigné.",
+      img: "https://res.cloudinary.com/diptsoc4h/image/upload/v1772315771/WhatsApp_Image_2026-02-27_at_14.34.03_2_e1840t.jpg"
     },
     {
-      title: "Durabilité Maximale",
-      description: "Résiste aux lavages fréquents sans perdre sa forme ni sa couleur d'origine.",
-      img: "https://i.ibb.co/nN3ZQ41x/Whats-App-Image-2026-01-05-at-14-36-25.jpg"
+      title: "Chaleur Optimale",
+      description: "Idéal pour les journées fraîches grâce à sa doublure en polaire douce et isolante.",
+      img: "https://res.cloudinary.com/diptsoc4h/image/upload/v1772315772/WhatsApp_Image_2026-02-27_at_14.34.03_4_xlmnbr.jpg"
+    },
+    {
+      title: "Style Polyvalent",
+      description: "Se marie parfaitement avec un jean ou un jogging pour un look décontracté au quotidien.",
+      img: "https://res.cloudinary.com/diptsoc4h/image/upload/v1772315773/WhatsApp_Image_2026-02-27_at_14.34.03_1_t2vtp4.jpg"
+    },
+    {
+      title: "Qualité Durable",
+      description: "Conçu pour durer, il résiste aux lavages fréquents sans perdre sa forme ni sa douceur.",
+      img: "https://res.cloudinary.com/diptsoc4h/image/upload/v1772315775/WhatsApp_Image_2026-02-27_at_14.34.03_3_xc6kkd.jpg"
     }
   ];
 
@@ -33,7 +43,7 @@ const GalleryBenefits: React.FC = () => {
           <p className="text-gray-600 max-w-2xl mx-auto">Plus qu'un simple vêtement, c'est une expérience de confort que vous ne voudrez plus quitter.</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {benefits.map((benefit, idx) => (
             <div key={idx} className="group overflow-hidden rounded-[32px] bg-gray-50 hover:bg-white border border-gray-100 transition-all hover:shadow-2xl hover:-translate-y-1">
               <div className="aspect-[3/4] overflow-hidden">

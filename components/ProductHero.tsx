@@ -81,10 +81,10 @@ const ProductHero: React.FC = () => {
         <div className="bg-gray-50 p-5 md:p-7 rounded-[32px] border border-gray-100 shadow-inner text-center max-w-md mx-auto lg:mx-0 w-full">
           <div className="flex flex-col items-center justify-center gap-1 mb-5">
              <div className="flex items-center gap-3">
-                <span className="text-4xl md:text-5xl font-black text-gray-900 tracking-tighter">349 DH</span>
+                <span className="text-4xl md:text-5xl font-black text-gray-900 tracking-tighter">299 DH</span>
                 <span className="text-xl md:text-2xl text-red-600 line-through font-bold opacity-70 decoration-[2px]">699 DH</span>
              </div>
-             <p className="text-green-600 font-black text-[10px] uppercase tracking-[0.15em] mt-1">Économisez 350 DH aujourd'hui</p>
+             <p className="text-green-600 font-black text-[10px] uppercase tracking-[0.15em] mt-1">Économisez 400 DH aujourd'hui</p>
           </div>
           
           <a 
